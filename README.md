@@ -1,4 +1,3 @@
-:octocat:
 <p align="center">
 	<a href="https://github.com/brunosouzas"><img src="https://img.shields.io/badge/github--_.svg?style=social&logo=github" alt="GitHub"></a>
 	<a href="https://twitter.com/brunosouzas"><img src="https://img.shields.io/badge/twitter--_.svg?style=social&logo=twitter" alt="Twitter"></a>
