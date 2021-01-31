@@ -4,6 +4,12 @@
 	<a href="https://www.linkedin.com/in/brunosouzas"><img src="https://img.shields.io/badge/LinkedIn--_.svg?style=social&logo=linkedin" alt="LinkedIn"></a>
 </p>
 
+<!-- blank line -->
+<figure class="video_container">
+  <iframe src="https://youtu.be/BG3_N4NkWJ8" frameborder="0" allowfullscreen="true"> </iframe>
+</figure>
+<!-- blank line -->
+
 <!--
 Here are some ideas to get you started:
 
