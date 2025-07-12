@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: brunosouzas
+  description: main page of brunosouzas in GitHub.
+  annotations:
+    github.com/project-slug: 'brunosouzas/brunosouzas'
+    backstage.io/techdocs-ref: dir:./techDocs
+spec:
+  type: website
+  lifecycle: development
+  owner: administrators
