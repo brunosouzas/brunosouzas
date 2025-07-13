@@ -2,6 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: brunosouzas-github-mainpage
+  title: brunosouzas GitHub MainPage
   description: main page of brunosouzas in GitHub.
   annotations:
     github.com/project-slug: 'brunosouzas/brunosouzas'
