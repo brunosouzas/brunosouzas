@@ -3,21 +3,28 @@
 
 The sources in assets/site/ are copies of public/images/home/ in the
 brunosouzas.com repository, so the profile carries the same brand as the
-site. This script composes them into the images the README shows:
+site. This script draws:
 
-- assets/header.svg: the site's home banner as the background, with the
-  avatar, the name and the site address on top.
-- assets/topic-<slug>.svg and -dark.svg: one card per site category.
-- assets/link-<slug>.svg and -dark.svg: the link buttons (site, LinkedIn, email).
+- assets/header.svg: the site's home banner with the avatar, the name and
+  the site address on top.
+- assets/link-<slug>.svg and -dark.svg: the buttons (All articles, site,
+  LinkedIn, email).
+
+It also holds the article card that scripts/update_articles.py draws for each
+of the latest articles, so all the README images share one style.
 
 GitHub shows README images through <img>, so every SVG is self-contained:
 no external references, no CSS, no scripts, fixed colours only.
+`problems()` checks that rule, for these files and for the covers downloaded
+from the site.
 
 Usage: python3 scripts/build_assets.py
 """
 
 from __future__ import annotations
 
+import re
+import textwrap
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from html import escape
@@ -39,8 +46,26 @@ RING = "#1C2D74"
 WHITE = "#FFFFFF"
 LIGHT_BLUE = "#8FB2FF"
 YELLOW = "#FFD25A"
+GREEN = "#3DDC84"
+MUTED = "#4A5578"
 # The site's dark-theme accents (category-*-dark.svg, social-*-dark.svg).
 DARK_SHADOW = "#4C5CB8"
+DARK_HALO = "#EEF1FF"
+
+FORBIDDEN = {
+    "an external or internal link": re.compile(r"\bhref="),
+    "a <style> block": re.compile(r"<style\b"),
+    "a <script>": re.compile(r"<script\b"),
+    "an embedded image or object": re.compile(r"<image\b|<foreignObject\b"),
+    "currentColor": re.compile(r"currentColor"),
+    "a blur or gradient": re.compile(r"\bfilter=|<filter\b|Gradient"),
+    "inline CSS": re.compile(r'\bstyle="|\bclass="'),
+}
+
+
+def problems(svg: str) -> list[str]:
+    """Why an SVG would not render as-is through <img> on GitHub; empty when it is fine."""
+    return [what for what, pattern in FORBIDDEN.items() if pattern.search(svg)]
 
 
 @dataclass(frozen=True)
@@ -49,10 +74,12 @@ class Theme:
     outline: str
     shadow: str
     text: str
+    muted: str
 
 
-LIGHT = Theme(card=WHITE, outline=INK, shadow=INK, text=INK)
-DARK = Theme(card=NAVY, outline=DARK_SHADOW, shadow=DARK_SHADOW, text=WHITE)
+LIGHT = Theme(card=WHITE, outline=INK, shadow=INK, text=INK, muted=MUTED)
+DARK = Theme(card=NAVY, outline=DARK_SHADOW, shadow=DARK_SHADOW, text=WHITE, muted=LIGHT_BLUE)
+THEMES = (("", LIGHT), ("-dark", DARK))
 
 
 def tag(element: ET.Element) -> str:
@@ -61,10 +88,6 @@ def tag(element: ET.Element) -> str:
 
 def load(name: str) -> ET.Element:
     return ET.parse(SOURCE / name).getroot()
-
-
-def serialise(elements: list[ET.Element]) -> str:
-    return "".join(ET.tostring(e, encoding="unicode") for e in elements)
 
 
 def drop_ns(markup: str) -> str:
@@ -90,13 +113,13 @@ def inner(root: ET.Element, skip_background: bool = False) -> str:
         ):
             continue
         kept.append(child)
-    return drop_ns(serialise(kept))
+    return drop_ns("".join(ET.tostring(e, encoding="unicode") for e in kept))
 
 
-def nested(root: ET.Element, x: float, y: float, size: float) -> str:
+def nested(root: ET.Element, x: float, y: float, width: float, height: float | None = None) -> str:
     """Place a whole source SVG as a nested, scaled <svg>."""
     return (
-        f'<svg x="{x}" y="{y}" width="{size}" height="{size}" '
+        f'<svg x="{x}" y="{y}" width="{width}" height="{height or width}" '
         f'viewBox="{root.get("viewBox")}">{inner(root)}</svg>'
     )
 
@@ -113,6 +136,16 @@ def document(width: int, height: int, prefix: str, title: str, desc: str, body: 
         f'  <title id="{prefix}-t">{escape(title)}</title>\n'
         f'  <desc id="{prefix}-d">{escape(desc)}</desc>\n'
         f"{body}\n</svg>\n"
+    )
+
+
+def card(width: int, height: int, theme: Theme, offset: int = 6, radius: int = 18) -> str:
+    """A flat card with an outline and a hard offset shadow, the site's style."""
+    w, h = width - offset - 4, height - offset - 4
+    return (
+        f'  <rect x="{2 + offset}" y="{2 + offset}" width="{w}" height="{h}" rx="{radius}" fill="{theme.shadow}"/>\n'
+        f'  <rect x="2" y="2" width="{w}" height="{h}" rx="{radius}" fill="{theme.card}" '
+        f'stroke="{theme.outline}" stroke-width="3"/>\n'
     )
 
 
@@ -155,52 +188,10 @@ def header() -> str:
     )
 
 
-# Topic cards ------------------------------------------------------------------
-
-TOPIC_W, TOPIC_H = 220, 200
-
-
-@dataclass(frozen=True)
-class Topic:
-    slug: str
-    label: str
-
-
-TOPICS = [
-    Topic("integration", "Integration"),
-    Topic("delivery", "Delivery"),
-    Topic("ai-engineering", "AI engineering"),
-    Topic("personal-tools", "Personal tools"),
-]
-
-
-def card(width: int, height: int, theme: Theme, offset: int = 6, radius: int = 18) -> str:
-    w, h = width - offset - 4, height - offset - 4
-    return (
-        f'  <rect x="{2 + offset}" y="{2 + offset}" width="{w}" height="{h}" rx="{radius}" fill="{theme.shadow}"/>\n'
-        f'  <rect x="2" y="2" width="{w}" height="{h}" rx="{radius}" fill="{theme.card}" '
-        f'stroke="{theme.outline}" stroke-width="3"/>\n'
-    )
-
-
-def topic(item: Topic, theme: Theme, dark: bool) -> str:
-    icon = load(f"category-{item.slug}{'-dark' if dark else ''}.svg")
-    icon_desc = next(e.text for e in icon if tag(e) == "desc")
-    size = 112
-    x = (TOPIC_W - 6 - size) / 2 + 4
-    body = (
-        card(TOPIC_W, TOPIC_H, theme)
-        + "  "
-        + nested(icon, x, 18, size)
-        + f'\n  <text x="{(TOPIC_W - 6) / 2}" y="164" font-size="21" font-weight="800" '
-        f'fill="{theme.text}" text-anchor="middle">{escape(item.label)}</text>'
-    )
-    return document(TOPIC_W, TOPIC_H, "tp", item.label, f"Category card. {icon_desc}", body)
-
-
-# Link buttons -------------------------------------------------------------------
+# Buttons ----------------------------------------------------------------------
 
 LINK_H = 64
+ICON = 40
 
 
 @dataclass(frozen=True)
@@ -208,40 +199,114 @@ class Link:
     slug: str
     label: str
     width: int
-    icon: str  # source file stem; "avatar" uses the avatar
+    icon: str  # a source file stem, "avatar", or "arrow" (drawn here)
 
 
 LINKS = [
+    Link("articles", "All articles", 190, "arrow"),
     Link("site", "brunosouzas.com", 250, "avatar"),
     Link("linkedin", "LinkedIn", 170, "social-linkedin"),
     Link("email", "Email", 150, "social-email"),
 ]
 
 
-def link(item: Link, theme: Theme, dark: bool) -> str:
-    size = 40
-    if item.icon == "avatar":
-        icon = nested(load("avatar.svg"), 12, 9, size)
+def arrow_icon(x: float, y: float, dark: bool) -> str:
+    """A green tile with an arrow, drawn like the site's social icons (46x46 at this scale)."""
+    s = (ICON + 4) / 46
+    if dark:
+        under = (
+            f'<rect x="4" y="4" width="41" height="41" rx="11" fill="{DARK_SHADOW}"/>'
+            f'<rect x="0.5" y="0.5" width="41" height="41" rx="11" fill="{DARK_HALO}"/>'
+        )
     else:
-        icon = nested(load(f"{item.icon}{'-dark' if dark else ''}.svg"), 12, 9, size + 4)
+        under = f'<rect x="5" y="5" width="38" height="38" rx="9" fill="{INK}"/>'
+    return (
+        f'<g transform="translate({x} {y}) scale({s:.4f})">{under}'
+        f'<rect x="2" y="2" width="38" height="38" rx="9" fill="{GREEN}" stroke="{INK}" stroke-width="2.5"/>'
+        f'<path d="M11,21 H30 M23,14 L30,21 L23,28" fill="none" stroke="{INK}" stroke-width="3.5" '
+        f'stroke-linecap="round" stroke-linejoin="round"/></g>'
+    )
+
+
+def link(item: Link, theme: Theme, dark: bool) -> str:
+    if item.icon == "avatar":
+        icon = nested(load("avatar.svg"), 12, 9, ICON)
+    elif item.icon == "arrow":
+        icon = arrow_icon(12, 9, dark)
+    else:
+        icon = nested(load(f"{item.icon}{'-dark' if dark else ''}.svg"), 12, 9, ICON + 4)
     body = (
         card(item.width, LINK_H, theme, offset=5, radius=14)
         + f"  {icon}\n"
-        + f'  <text x="{12 + size + 12}" y="{LINK_H / 2 + 4}" font-size="19" font-weight="800" '
+        + f'  <text x="{12 + ICON + 12}" y="{LINK_H / 2 + 4}" font-size="19" font-weight="800" '
         f'fill="{theme.text}">{escape(item.label)}</text>'
     )
-    return document(item.width, LINK_H, "lk", item.label, f"Link button: {item.label}.", body)
+    return document(item.width, LINK_H, "lk", item.label, f"Button: {item.label}.", body)
+
+
+# Article card -------------------------------------------------------------------
+
+ARTICLE_W, ARTICLE_H = 400, 352
+COVER_X, COVER_Y, COVER_W = 18, 18, 358
+COVER_H = round(COVER_W * 420 / 800)  # the site's cover ratio, 800x420
+TITLE_SIZE, TITLE_LEAD, TITLE_LINES = 20, 26, 3
+TITLE_CHARS = 31  # about 358 px of Lato (or Arial) bold at 20 px
+
+
+def title_lines(title: str) -> list[str]:
+    """The title wrapped on words to fit the card, at most TITLE_LINES lines."""
+    lines = textwrap.wrap(title, TITLE_CHARS, break_long_words=True)
+    if len(lines) > TITLE_LINES:
+        lines = lines[:TITLE_LINES]
+        lines[-1] = textwrap.shorten(lines[-1] + " …", TITLE_CHARS, placeholder=" …")
+    return lines
+
+
+def article_card(cover_svg: str, title: str, date: str, theme: Theme) -> str:
+    """One latest-article card: the site's cover, the title and the date."""
+    cover = ET.fromstring(cover_svg)
+    cover_desc = next((e.text or "" for e in cover if tag(e) == "desc"), "").strip()
+    first = COVER_Y + COVER_H + 34
+    texts = "".join(
+        f'<text x="{COVER_X}" y="{first + i * TITLE_LEAD}" font-size="{TITLE_SIZE}" font-weight="800" '
+        f'fill="{theme.text}">{escape(line)}</text>'
+        for i, line in enumerate(title_lines(title))
+    )
+    body = (
+        card(ARTICLE_W, ARTICLE_H, theme)
+        + f'  <defs><clipPath id="pfa-c"><rect x="{COVER_X}" y="{COVER_Y}" width="{COVER_W}" '
+        f'height="{COVER_H}" rx="10"/></clipPath></defs>\n'
+        + f'  <g clip-path="url(#pfa-c)">{nested(cover, COVER_X, COVER_Y, COVER_W, COVER_H)}</g>\n'
+        + f'  <rect x="{COVER_X}" y="{COVER_Y}" width="{COVER_W}" height="{COVER_H}" rx="10" '
+        f'fill="none" stroke="{theme.outline}" stroke-width="3"/>\n'
+        + f"  {texts}\n"
+        + f'  <text x="{COVER_X}" y="{ARTICLE_H - 30}" font-size="16" font-weight="700" '
+        f'fill="{theme.muted}">{escape(date)}</text>'
+    )
+    return document(
+        ARTICLE_W,
+        ARTICLE_H,
+        "pfa",
+        title,
+        f"Article card: {title}, published {date}. Cover: {cover_desc}",
+        body,
+    )
+
+
+# Files --------------------------------------------------------------------------
+
+
+def generated() -> dict[str, str]:
+    """Every file this script owns in assets/, by name."""
+    files = {"header.svg": header()}
+    for suffix, theme in THEMES:
+        for item in LINKS:
+            files[f"link-{item.slug}{suffix}.svg"] = link(item, theme, suffix == "-dark")
+    return files
 
 
 def main() -> None:
-    files = {"header.svg": header()}
-    for dark, theme in ((False, LIGHT), (True, DARK)):
-        suffix = "-dark" if dark else ""
-        for item in TOPICS:
-            files[f"topic-{item.slug}{suffix}.svg"] = topic(item, theme, dark)
-        for item in LINKS:
-            files[f"link-{item.slug}{suffix}.svg"] = link(item, theme, dark)
-    for name, content in files.items():
+    for name, content in generated().items():
         (OUTPUT / name).write_text(content, encoding="utf-8")
         print(f"wrote assets/{name}")
 

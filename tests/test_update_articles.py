@@ -1,4 +1,5 @@
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from xml.sax.saxutils import escape
@@ -7,24 +8,45 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import update_articles as ua  # noqa: E402
 
-FEED = """<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0"><channel><title>Articles</title>
-<item><title>Write in Obsidian, Publish on Your Own Site</title>
-<link>https://brunosouzas.com/blog/write-in-obsidian-publish-on-your-site/</link>
-<pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate></item>
-<item><title>When AI Writes the Code, the Engineer&apos;s Work Moves</title>
-<link>https://brunosouzas.com/blog/where-the-work-moves/</link>
-<pubDate>Sun, 27 Sep 2026 00:00:00 GMT</pubDate></item>
-<item><title>Third</title><link>https://brunosouzas.com/blog/third/</link>
-<pubDate>Fri, 04 Sep 2026 00:00:00 GMT</pubDate></item>
-</channel></rss>"""
+COVER_URL = "https://brunosouzas.com/_astro/{}-card.abc123.svg"
+COVER_SVG = (
+    '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420">'
+    "<title>t</title><desc>A cover.</desc>"
+    '<rect width="800" height="420" fill="#14215A"/></svg>'
+)
+
+
+def item(title, link, date="Thu, 15 Oct 2026 00:00:00 GMT", cover=None):
+    slug = link.rstrip("/").rsplit("/", 1)[-1]
+    url = escape(cover or COVER_URL.format(slug), {'"': "&quot;"})
+    media = "" if cover == "" else f'<media:content url="{url}" medium="image"/>'
+    pub = f"<pubDate>{date}</pubDate>" if date else ""
+    return f"<item><title>{title}</title><link>{escape(link)}</link>{pub}{media}</item>"
+
+
+def feed(*items):
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Articles</title>'
+        + "".join(items)
+        + "</channel></rss>"
+    )
+
+
+FEED = feed(
+    item("Write in Obsidian, Publish on Your Own Site", "https://brunosouzas.com/blog/write-in-obsidian/"),
+    item(
+        "When AI Writes the Code, the Engineer&apos;s Work Moves",
+        "https://brunosouzas.com/blog/where-the-work-moves/",
+        "Sun, 27 Sep 2026 00:00:00 GMT",
+    ),
+    item("Third", "https://brunosouzas.com/blog/third/", "Fri, 04 Sep 2026 00:00:00 GMT"),
+)
 
 README = """# Title
 
-Intro.
-
 <!-- articles:start -->
-- old entry
+old entry
 <!-- articles:end -->
 
 Footer.
@@ -32,11 +54,13 @@ Footer.
 
 
 class ParseFeed(unittest.TestCase):
-    def test_reads_title_link_and_site_date(self):
+    def test_reads_title_link_date_and_cover(self):
         first = ua.parse_feed(FEED)[0]
         self.assertEqual(first.title, "Write in Obsidian, Publish on Your Own Site")
-        self.assertEqual(first.link, "https://brunosouzas.com/blog/write-in-obsidian-publish-on-your-site/")
+        self.assertEqual(first.link, "https://brunosouzas.com/blog/write-in-obsidian/")
         self.assertEqual(first.date, "15 Oct, 2026")
+        self.assertEqual(first.cover, "https://brunosouzas.com/_astro/write-in-obsidian-card.abc123.svg")
+        self.assertEqual(first.slug, "write-in-obsidian")
 
     def test_decodes_entities_and_drops_leading_zero(self):
         articles = ua.parse_feed(FEED)
@@ -44,122 +68,118 @@ class ParseFeed(unittest.TestCase):
         self.assertEqual(articles[2].date, "4 Sep, 2026")
 
     def test_keeps_feed_order_up_to_limit(self):
-        titles = [a.title for a in ua.parse_feed(FEED, limit=2)]
-        self.assertEqual(len(titles), 2)
-        self.assertTrue(titles[0].startswith("Write in Obsidian"))
-        self.assertTrue(titles[1].startswith("When AI Writes"))
-
-    def test_rejects_an_empty_feed(self):
-        with self.assertRaises(ValueError):
-            ua.parse_feed("<rss><channel></channel></rss>")
-
-    def test_rejects_a_document_that_is_not_rss(self):
-        with self.assertRaises(ValueError):
-            ua.parse_feed("<html><body/></html>")
-
-    def test_rejects_an_item_without_a_date(self):
-        feed = "<rss><channel><item><title>T</title><link>https://brunosouzas.com/blog/t/</link></item></channel></rss>"
-        with self.assertRaises(ValueError):
-            ua.parse_feed(feed)
-
-    def test_rejects_links_outside_the_site_or_unsafe_in_markdown(self):
-        for link in (
-            "https://evil.example/blog/t/",
-            "http://brunosouzas.com/blog/t/",
-            "https://brunosouzas.com.evil.example/t/",
-            "https://brunosouzas.com/blog/t)<script>/",
-        ):
-            feed = (
-                f"<rss><channel><item><title>T</title><link>{escape(link)}</link>"
-                "<pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate></item></channel></rss>"
-            )
-            with self.subTest(link=link), self.assertRaises(ValueError):
-                ua.parse_feed(feed)
+        self.assertEqual([a.slug for a in ua.parse_feed(FEED, limit=2)], ["write-in-obsidian", "where-the-work-moves"])
 
     def test_collapses_whitespace_in_titles(self):
-        feed = (
-            "<rss><channel><item><title>Real\n\n  title</title><link>https://brunosouzas.com/blog/t/</link>"
-            "<pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate></item></channel></rss>"
-        )
-        self.assertEqual(ua.parse_feed(feed)[0].title, "Real title")
+        self.assertEqual(ua.parse_feed(feed(item("Real\n\n  title", "https://brunosouzas.com/blog/t/")))[0].title, "Real title")
 
-    def test_rejects_titles_that_would_render_as_links(self):
-        for title in ("Real title&#10;&#10;https://evil.example/x", "See www.evil.example", "mail me@evil.example"):
-            feed = (
-                f"<rss><channel><item><title>{title}</title><link>https://brunosouzas.com/blog/t/</link>"
-                "<pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate></item></channel></rss>"
-            )
-            with self.subTest(title=title), self.assertRaises(ValueError):
-                ua.parse_feed(feed)
+    def test_rejects_feeds_it_cannot_trust(self):
+        cases = {
+            "empty": "<rss><channel></channel></rss>",
+            "not rss": "<html><body/></html>",
+            "no date": feed(item("T", "https://brunosouzas.com/blog/t/", date="")),
+            "no cover": feed(item("T", "https://brunosouzas.com/blog/t/", cover="")),
+            "link elsewhere": feed(item("T", "https://evil.example/blog/t/")),
+            "plain http": feed(item("T", "http://brunosouzas.com/blog/t/")),
+            "lookalike host": feed(item("T", "https://brunosouzas.com.evil.example/t/")),
+            "unsafe link": feed(item("T", 'https://brunosouzas.com/blog/t"onerror=x/')),
+            "no slug": feed(item("T", "https://brunosouzas.com/blog/Bad_Slug/")),
+            "cover elsewhere": feed(item("T", "https://brunosouzas.com/blog/t/", cover="https://evil.example/c.svg")),
+        }
+        for case, text in cases.items():
+            with self.subTest(case), self.assertRaises(ValueError):
+                ua.parse_feed(text)
+
+
+class Cards(unittest.TestCase):
+    def test_draws_a_light_and_a_dark_card(self):
+        article = ua.parse_feed(FEED)[0]
+        files = ua.cards(article, COVER_SVG)
+        self.assertEqual(sorted(files), ["write-in-obsidian-dark.svg", "write-in-obsidian.svg"])
+        self.assertIn("Write in Obsidian", files["write-in-obsidian.svg"])
+
+    def test_rejects_a_cover_that_would_not_render(self):
+        article = ua.parse_feed(FEED)[0]
+        with self.assertRaises(ValueError):
+            ua.cards(article, COVER_SVG.replace("<rect", '<image href="https://evil.example/x.png"/><rect'))
 
 
 class Render(unittest.TestCase):
-    def test_escapes_brackets_in_titles(self):
-        line = ua.render([ua.Article("Arrays [and] lists", "https://x/", "1 Jan, 2026")])
-        self.assertEqual(line, "- [Arrays \\[and\\] lists](https://x/) · 1 Jan, 2026")
+    def test_links_each_card_with_light_and_dark_images(self):
+        block = ua.render(ua.parse_feed(FEED, limit=1))
+        self.assertEqual(
+            block,
+            '<a href="https://brunosouzas.com/blog/write-in-obsidian/"><picture>'
+            '<source media="(prefers-color-scheme: dark)" srcset="assets/articles/write-in-obsidian-dark.svg">'
+            '<img src="assets/articles/write-in-obsidian.svg" width="49%" '
+            'alt="Write in Obsidian, Publish on Your Own Site (15 Oct, 2026)"></picture></a>',
+        )
 
     def test_escapes_html_in_titles(self):
-        line = ua.render([ua.Article("<img src=x>", "https://x/", "1 Jan, 2026")])
-        self.assertEqual(line, "- [\\<img src=x\\>](https://x/) · 1 Jan, 2026")
-
-    def test_escapes_emphasis_and_code_in_titles(self):
-        line = ua.render([ua.Article("*a* _b_ `c`", "https://x/", "1 Jan, 2026")])
-        self.assertEqual(line, "- [\\*a\\* \\_b\\_ \\`c\\`](https://x/) · 1 Jan, 2026")
+        article = ua.Article('<b>"x"</b>', "https://brunosouzas.com/blog/x/", "1 Jan, 2026", COVER_URL)
+        self.assertIn('alt="&lt;b&gt;&quot;x&quot;&lt;/b&gt; (1 Jan, 2026)"', ua.render([article]))
 
 
 class ReplaceBlock(unittest.TestCase):
     def test_replaces_only_the_block(self):
-        updated = ua.replace_block(README, "- new entry")
-        self.assertIn("<!-- articles:start -->\n- new entry\n<!-- articles:end -->", updated)
+        updated = ua.replace_block(README, "new entry")
+        self.assertIn("<!-- articles:start -->\nnew entry\n<!-- articles:end -->", updated)
         self.assertNotIn("old entry", updated)
-        self.assertTrue(updated.startswith("# Title\n\nIntro.\n"))
+        self.assertTrue(updated.startswith("# Title\n"))
         self.assertTrue(updated.endswith("\n\nFooter.\n"))
 
     def test_is_stable_when_run_twice(self):
-        once = ua.replace_block(README, "- new entry")
-        self.assertEqual(ua.replace_block(once, "- new entry"), once)
+        once = ua.replace_block(README, "new entry")
+        self.assertEqual(ua.replace_block(once, "new entry"), once)
 
     def test_requires_both_markers(self):
         with self.assertRaises(ValueError):
-            ua.replace_block("no markers here", "- x")
+            ua.replace_block("no markers here", "x")
 
 
-class Main(unittest.TestCase):
-    def test_writes_only_when_the_list_changed(self):
-        import tempfile
+class Update(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.readme = Path(self.tmp.name) / "README.md"
+        self.readme.write_text(README, encoding="utf-8")
+        self.cards = Path(self.tmp.name) / "articles"
+        self.fetched = []
 
-        original_fetch = ua.fetch
-        ua.fetch = lambda url: FEED
-        try:
-            with tempfile.TemporaryDirectory() as tmp:
-                readme = Path(tmp) / "README.md"
-                readme.write_text(README, encoding="utf-8")
-                self.assertEqual(ua.main(["--readme", str(readme)]), 0)
-                first = readme.read_text(encoding="utf-8")
-                self.assertIn("Write in Obsidian", first)
-                mtime = readme.stat().st_mtime_ns
-                self.assertEqual(ua.main(["--readme", str(readme)]), 0)
-                self.assertEqual(readme.stat().st_mtime_ns, mtime)
-        finally:
-            ua.fetch = original_fetch
+    def tearDown(self):
+        self.tmp.cleanup()
 
-    def test_leaves_the_readme_untouched_when_the_fetch_fails(self):
-        import tempfile
+    def get(self, url):
+        self.fetched.append(url)
+        return COVER_SVG
 
-        def failing_fetch(url):
+    def test_writes_cards_and_readme_then_nothing_on_a_second_run(self):
+        changed = ua.update(FEED, self.readme, self.cards, limit=2, get=self.get)
+        self.assertIn("README.md", changed)
+        self.assertEqual(len(list(self.cards.glob("*.svg"))), 4)
+        self.assertEqual(len(self.fetched), 2)
+        self.assertIn("assets/articles/where-the-work-moves.svg", self.readme.read_text(encoding="utf-8"))
+        self.assertEqual(ua.update(FEED, self.readme, self.cards, limit=2, get=self.get), [])
+
+    def test_removes_the_cards_of_articles_that_left_the_list(self):
+        ua.update(FEED, self.readme, self.cards, limit=2, get=self.get)
+        changed = ua.update(FEED, self.readme, self.cards, limit=1, get=self.get)
+        self.assertIn("assets/articles/where-the-work-moves.svg (removed)", changed)
+        self.assertEqual(sorted(p.name for p in self.cards.glob("*.svg")), ["write-in-obsidian-dark.svg", "write-in-obsidian.svg"])
+
+    def test_leaves_everything_untouched_when_a_cover_fetch_fails(self):
+        def failing(url):
             raise OSError("network down")
 
-        original_fetch = ua.fetch
-        ua.fetch = failing_fetch
-        try:
-            with tempfile.TemporaryDirectory() as tmp:
-                readme = Path(tmp) / "README.md"
-                readme.write_text(README, encoding="utf-8")
-                with self.assertRaises(OSError):
-                    ua.main(["--readme", str(readme)])
-                self.assertEqual(readme.read_text(encoding="utf-8"), README)
-        finally:
-            ua.fetch = original_fetch
+        with self.assertRaises(OSError):
+            ua.update(FEED, self.readme, self.cards, get=failing)
+        self.assertEqual(self.readme.read_text(encoding="utf-8"), README)
+        self.assertFalse(self.cards.exists())
+
+    def test_leaves_everything_untouched_when_a_cover_is_unsafe(self):
+        with self.assertRaises(ValueError):
+            ua.update(FEED, self.readme, self.cards, get=lambda url: "<svg><script>x()</script></svg>")
+        self.assertEqual(self.readme.read_text(encoding="utf-8"), README)
+        self.assertFalse(self.cards.exists())
 
 
 if __name__ == "__main__":

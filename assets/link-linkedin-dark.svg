@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="170" height="64" viewBox="0 0 170 64" role="img" aria-labelledby="lk-t lk-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
   <title id="lk-t">LinkedIn</title>
-  <desc id="lk-d">Link button: LinkedIn.</desc>
+  <desc id="lk-d">Button: LinkedIn.</desc>
   <rect x="7" y="7" width="161" height="55" rx="14" fill="#4C5CB8"/>
   <rect x="2" y="2" width="161" height="55" rx="14" fill="#14215A" stroke="#4C5CB8" stroke-width="3"/>
   <svg x="12" y="9" width="44" height="44" viewBox="0 0 46 46"><rect x="4" y="4" width="41" height="41" rx="11" fill="#4C5CB8" />

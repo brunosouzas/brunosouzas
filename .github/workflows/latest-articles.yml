@@ -1,7 +1,7 @@
 name: Latest articles
 
-# Keeps the "Latest articles" list in README.md in step with the RSS feed of
-# brunosouzas.com. Commits to main only when the list changed.
+# Keeps the "Latest articles" cards in README.md and assets/articles/ in step
+# with the RSS feed of brunosouzas.com. Commits to main only when they changed.
 
 on:
   schedule:
@@ -24,17 +24,17 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Refresh the list from the feed
+      - name: Refresh the cards from the feed
         run: python3 scripts/update_articles.py
 
-      - name: Commit when the list changed
+      - name: Commit when the cards changed
         run: |
-          if git diff --quiet -- README.md; then
+          git add README.md assets/articles
+          if git diff --cached --quiet; then
             echo "No new articles."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md
           git commit -m "docs: refresh latest articles"
           git push
