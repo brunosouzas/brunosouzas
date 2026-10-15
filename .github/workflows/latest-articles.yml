@@ -17,6 +17,8 @@ concurrency:
 
 jobs:
   update:
+    # The list belongs to main only, even when the workflow is dispatched from another branch.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

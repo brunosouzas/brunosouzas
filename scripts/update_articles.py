@@ -28,6 +28,8 @@ TIMEOUT_S = 20
 # The workflow commits what the feed says straight to main: accept only links to the site.
 SITE = "https://brunosouzas.com/"
 UNSAFE_IN_LINK = set(" \t\n()<>")
+# GitHub turns these into links even inside link text, so a title must not carry them.
+AUTOLINK_MARKERS = ("://", "www.", "@")
 
 
 @dataclass(frozen=True)
@@ -44,13 +46,15 @@ def parse_feed(xml_text: str, limit: int = LIMIT) -> list[Article]:
         raise ValueError("not an RSS 2.0 feed: no <channel>")
     articles = []
     for item in channel.findall("item")[:limit]:
-        title = (item.findtext("title") or "").strip()
+        title = " ".join((item.findtext("title") or "").split())
         link = (item.findtext("link") or "").strip()
         pub_date = (item.findtext("pubDate") or "").strip()
         if not title or not link:
             raise ValueError("feed item without a title or a link")
         if not link.startswith(SITE) or UNSAFE_IN_LINK & set(link):
             raise ValueError(f"feed link outside {SITE} or not safe in Markdown: {link!r}")
+        if any(marker in title.lower() for marker in AUTOLINK_MARKERS):
+            raise ValueError(f"feed title would render as a link: {title!r}")
         if not pub_date:
             raise ValueError(f"feed item without a pubDate: {title!r}")
         published = parsedate_to_datetime(pub_date)
@@ -62,8 +66,8 @@ def parse_feed(xml_text: str, limit: int = LIMIT) -> list[Article]:
 
 
 def markdown_text(text: str) -> str:
-    """Escape the characters that would break a Markdown link text or open an HTML tag."""
-    for char in "\\[]<>":
+    """Escape the characters that would break a Markdown link text, format it or open an HTML tag."""
+    for char in "\\[]<>*_`":
         text = text.replace(char, f"\\{char}")
     return text
 

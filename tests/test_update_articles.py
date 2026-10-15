@@ -76,6 +76,22 @@ class ParseFeed(unittest.TestCase):
             with self.subTest(link=link), self.assertRaises(ValueError):
                 ua.parse_feed(feed)
 
+    def test_collapses_whitespace_in_titles(self):
+        feed = (
+            "<rss><channel><item><title>Real\n\n  title</title><link>https://brunosouzas.com/blog/t/</link>"
+            "<pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate></item></channel></rss>"
+        )
+        self.assertEqual(ua.parse_feed(feed)[0].title, "Real title")
+
+    def test_rejects_titles_that_would_render_as_links(self):
+        for title in ("Real title&#10;&#10;https://evil.example/x", "See www.evil.example", "mail me@evil.example"):
+            feed = (
+                f"<rss><channel><item><title>{title}</title><link>https://brunosouzas.com/blog/t/</link>"
+                "<pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate></item></channel></rss>"
+            )
+            with self.subTest(title=title), self.assertRaises(ValueError):
+                ua.parse_feed(feed)
+
 
 class Render(unittest.TestCase):
     def test_escapes_brackets_in_titles(self):
@@ -85,6 +101,10 @@ class Render(unittest.TestCase):
     def test_escapes_html_in_titles(self):
         line = ua.render([ua.Article("<img src=x>", "https://x/", "1 Jan, 2026")])
         self.assertEqual(line, "- [\\<img src=x\\>](https://x/) · 1 Jan, 2026")
+
+    def test_escapes_emphasis_and_code_in_titles(self):
+        line = ua.render([ua.Article("*a* _b_ `c`", "https://x/", "1 Jan, 2026")])
+        self.assertEqual(line, "- [\\*a\\* \\_b\\_ \\`c\\`](https://x/) · 1 Jan, 2026")
 
 
 class ReplaceBlock(unittest.TestCase):
