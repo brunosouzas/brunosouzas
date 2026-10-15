@@ -15,7 +15,3 @@ Commit, push, PR creation, merge, publication, deployment and external writes re
 ## Local standards and maintenance
 
 Keep project facts in AGENTS.md and obligations in this rules index. Reusable processes and roles are owned by ai-engineering-kit; select the relevant installed skill instead of copying it into the project. Update context when source declarations change, distinguishing declared, inherited and observed versions.
-
-## Existing Copilot instructions
-
-[The existing Copilot instructions](../.github/copilot-instructions.md) are preserved unchanged. They describe API Specification tools and project creation. This repository is a profile/documentation asset; their API-specific requirements apply only when the authorized task actually concerns those assets, and do not authorize creating projects outside this checkout. If that legacy scope conflicts with the requested task or available tools, report it before acting.
