@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="250" height="64" viewBox="0 0 250 64" role="img" aria-labelledby="lk-t lk-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <title id="lk-t">brunosouzas.com</title>
+  <desc id="lk-d">Link button: brunosouzas.com.</desc>
+  <rect x="7" y="7" width="241" height="55" rx="14" fill="#4C5CB8"/>
+  <rect x="2" y="2" width="241" height="55" rx="14" fill="#14215A" stroke="#4C5CB8" stroke-width="3"/>
+  <svg x="12" y="9" width="40" height="40" viewBox="0 0 400 400"><rect width="400" height="400" rx="24" fill="#B9A6FF" />
+  <defs><clipPath id="av-f"><rect width="400" height="400" rx="24" /></clipPath></defs>
+  <g clip-path="url(#av-f)" fill="none" stroke="#AC97F7" stroke-width="2"><circle cx="200" cy="190" r="40" /><circle cx="200" cy="190" r="68" /><circle cx="200" cy="190" r="96" /><circle cx="200" cy="190" r="124" /><circle cx="200" cy="190" r="152" /><circle cx="200" cy="190" r="180" /><circle cx="200" cy="190" r="208" /><circle cx="200" cy="190" r="236" /><circle cx="200" cy="190" r="264" /><circle cx="200" cy="190" r="292" /><circle cx="200" cy="190" r="320" /><circle cx="200" cy="190" r="348" /><circle cx="200" cy="190" r="376" /><circle cx="200" cy="190" r="404" /><circle cx="200" cy="190" r="432" /><circle cx="200" cy="190" r="460" /><circle cx="200" cy="190" r="488" /><circle cx="200" cy="190" r="516" /><circle cx="200" cy="190" r="544" /><circle cx="200" cy="190" r="572" /><circle cx="200" cy="190" r="600" /><circle cx="200" cy="190" r="628" /><circle cx="200" cy="190" r="656" /><circle cx="200" cy="190" r="684" /><circle cx="200" cy="190" r="712" /></g>
+  <g stroke-linejoin="round" stroke-linecap="round">
+  <path d="M60,400 C64,330 110,298 200,298 C290,298 336,330 340,400 Z" fill="#0A1033" transform="translate(8 0)" />
+  <path d="M60,400 C64,330 110,298 200,298 C290,298 336,330 340,400 Z" fill="#14215A" stroke="#0A1033" stroke-width="5" />
+  <rect x="214" y="336" width="60" height="32" rx="9" fill="#FFFFFF" stroke="#0A1033" stroke-width="3.5" />
+  <text x="244" y="358" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="18" font-weight="700" fill="#0A1033" text-anchor="middle">{ }</text>
+  <rect x="174" y="262" width="52" height="46" rx="10" fill="#E8B48A" stroke="#0A1033" stroke-width="5" />
+  <circle cx="126" cy="196" r="15" fill="#E8B48A" stroke="#0A1033" stroke-width="5" />
+  <circle cx="274" cy="196" r="15" fill="#E8B48A" stroke="#0A1033" stroke-width="5" />
+  <path d="M130,170 C130,128 160,108 200,108 C240,108 270,128 270,170 L270,212 C270,262 240,288 200,288 C160,288 130,262 130,212 Z" fill="#E8B48A" stroke="#0A1033" stroke-width="5" />
+  <path d="M132,200 C140,214 150,222 162,224 C176,214 224,214 238,224 C250,222 260,214 268,200 C270,262 240,292 200,292 C160,292 130,262 132,200 Z" fill="#3B2A22" stroke="#0A1033" stroke-width="5" />
+  <path d="M186,246 C194,252 206,252 214,246" fill="none" stroke="#E8B48A" stroke-width="5" />
+  <circle cx="176" cy="200" r="7" fill="#0A1033" /><circle cx="224" cy="200" r="7" fill="#0A1033" />
+  <path d="M124,160 C124,104 160,78 200,78 C240,78 276,104 276,160 Z" fill="#0A1033" transform="translate(6 6)" />
+  <path d="M124,160 C124,104 160,78 200,78 C240,78 276,104 276,160 Z" fill="#2E4BA8" stroke="#0A1033" stroke-width="5" />
+  <path d="M200,80 L200,150" stroke="#0A1033" stroke-width="3" opacity=".5" />
+  <circle cx="200" cy="80" r="7" fill="#FF8A3D" stroke="#0A1033" stroke-width="3.5" />
+  <rect x="182" y="110" width="36" height="24" rx="6" fill="#FF8A3D" stroke="#0A1033" stroke-width="3.5" />
+  <path d="M190,122 L196,122 L200,116 L204,128 L208,122 L212,122" fill="none" stroke="#0A1033" stroke-width="2.5" />
+  <path d="M114,152 C160,142 240,142 286,152 C292,170 262,186 200,186 C138,186 108,170 114,152 Z" fill="#0A1033" transform="translate(5 5)" />
+  <path d="M114,152 C160,142 240,142 286,152 C292,170 262,186 200,186 C138,186 108,170 114,152 Z" fill="#22378A" stroke="#0A1033" stroke-width="5" />
+  <line x1="325.0" y1="266" x2="325.0" y2="244" stroke="#0A1033" stroke-width="4" />
+  <circle cx="325.0" cy="239" r="9" fill="#FF8A3D" stroke="#0A1033" stroke-width="4" />
+  <rect x="274" y="282.8" width="18" height="22.400000000000002" rx="6" fill="#3DDC84" stroke="#0A1033" stroke-width="4" />
+  <rect x="358" y="282.8" width="18" height="22.400000000000002" rx="6" fill="#3DDC84" stroke="#0A1033" stroke-width="4" />
+  <rect x="293" y="271" width="74" height="56" rx="16.8" fill="#0A1033" />
+  <rect x="288" y="266" width="74" height="56" rx="16.8" fill="#3DDC84" stroke="#0A1033" stroke-width="4" />
+  <rect x="297.62" y="273.84" width="54.76" height="28.0" rx="9.799999999999999" fill="#0A1033" />
+  <circle cx="312.42" cy="287.84" r="7.28" fill="#3DDC84" /><circle cx="337.58" cy="287.84" r="7.28" fill="#3DDC84" />
+  <rect x="310.2" y="307.44" width="29.6" height="5.04" rx="2.52" fill="#0A1033" />
+  <path d="M356,206 L360,218 L372,222 L360,226 L356,238 L352,226 L340,222 L352,218 Z" fill="#FFD25A" stroke="#0A1033" stroke-width="3" />
+  </g>
+</svg>
+  <text x="64" y="36.0" font-size="19" font-weight="800" fill="#FFFFFF">brunosouzas.com</text>
+</svg>

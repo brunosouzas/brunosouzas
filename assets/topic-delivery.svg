@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="200" viewBox="0 0 220 200" role="img" aria-labelledby="tp-t tp-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <title id="tp-t">Delivery</title>
+  <desc id="tp-d">Category card. A rocket taking off: pipelines that ship to production.</desc>
+  <rect x="8" y="8" width="210" height="190" rx="18" fill="#0A1033"/>
+  <rect x="2" y="2" width="210" height="190" rx="18" fill="#FFFFFF" stroke="#0A1033" stroke-width="3"/>
+  <svg x="55.0" y="18" width="112" height="112" viewBox="0 0 168 168"><circle cx="88" cy="88" r="72" fill="#0A1033" />
+  <circle cx="80" cy="80" r="72" fill="#FFD25A" stroke="#0A1033" stroke-width="4" />
+  <path d="M80,112 C70,128 74,138 80,146 C86,138 90,128 80,112 Z" fill="#FF6B6B" stroke="#0A1033" stroke-width="3.5" />
+  <path d="M80,116 C76,126 78,132 80,136 C82,132 84,126 80,116 Z" fill="#FFD25A" />
+  <path d="M64,92 L48,112 L64,110 Z" fill="#FF8A3D" stroke="#0A1033" stroke-width="3.5" stroke-linejoin="round" />
+  <path d="M96,92 L112,112 L96,110 Z" fill="#FF8A3D" stroke="#0A1033" stroke-width="3.5" stroke-linejoin="round" />
+  <path d="M80,26 C100,42 100,80 96,114 L64,114 C60,80 60,42 80,26 Z" fill="#0A1033" transform="translate(5 5)" />
+  <path d="M80,26 C100,42 100,80 96,114 L64,114 C60,80 60,42 80,26 Z" fill="#FFFFFF" stroke="#0A1033" stroke-width="4" stroke-linejoin="round" />
+  <circle cx="80" cy="66" r="11" fill="#8FB2FF" stroke="#0A1033" stroke-width="3.5" />
+  <path d="M66,96 L94,96" stroke="#3DDC84" stroke-width="6" stroke-linecap="round" />
+</svg>
+  <text x="107.0" y="164" font-size="21" font-weight="800" fill="#0A1033" text-anchor="middle">Delivery</text>
+</svg>
