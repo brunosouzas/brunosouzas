@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="64" viewBox="0 0 150 64" role="img" aria-labelledby="lk-t lk-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <title id="lk-t">Email</title>
+  <desc id="lk-d">Button: Email.</desc>
+  <rect x="7" y="7" width="141" height="55" rx="14" fill="#0A1033"/>
+  <rect x="2" y="2" width="141" height="55" rx="14" fill="#FFFFFF" stroke="#0A1033" stroke-width="3"/>
+  <svg x="12" y="9" width="44" height="44" viewBox="0 0 46 46"><rect x="5" y="5" width="38" height="38" rx="9" fill="#0A1033" />
+  <rect x="2" y="2" width="38" height="38" rx="9" fill="#FFD25A" stroke="#0A1033" stroke-width="2.5" />
+  <rect x="9" y="13" width="24" height="17" rx="3" fill="#FFFFFF" stroke="#0A1033" stroke-width="2.5" />
+  <path d="M10,15 L21,23 L32,15" fill="none" stroke="#0A1033" stroke-width="2.5" stroke-linejoin="round" />
+</svg>
+  <text x="64" y="36.0" font-size="19" font-weight="800" fill="#0A1033">Email</text>
+</svg>
