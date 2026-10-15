@@ -16,12 +16,8 @@ ARTICLES = ba.OUTPUT / "articles"
 README = (ba.ROOT / "README.md").read_text(encoding="utf-8")
 
 
-def article_cards() -> dict[str, str]:
-    title = "From a one-line request to a living spec: spec-driven development in practice"
-    return {
-        f"card{suffix}": ba.article_card(COVER, title, "10 Oct, 2026", theme)
-        for suffix, theme in ba.THEMES
-    }
+def thumbnails() -> dict[str, str]:
+    return {"thumbnail": ba.thumbnail(COVER, "Spec-driven development in practice")}
 
 
 class Problems(unittest.TestCase):
@@ -44,23 +40,10 @@ class Problems(unittest.TestCase):
                 self.assertTrue(ba.problems(svg))
 
 
-class TitleLines(unittest.TestCase):
-    def test_wraps_on_words_within_the_card(self):
-        lines = ba.title_lines("What Remains for Software Developers When AI Writes Code?")
-        self.assertEqual(lines, ["What Remains for Software", "Developers When AI Writes Code?"])
-        self.assertTrue(all(len(line) <= ba.TITLE_CHARS for line in lines))
-
-    def test_cuts_a_long_title_at_three_lines_with_an_ellipsis(self):
-        lines = ba.title_lines(" ".join(["integration"] * 20))
-        self.assertEqual(len(lines), ba.TITLE_LINES)
-        self.assertTrue(lines[-1].endswith("…"))
-        self.assertTrue(all(len(line) <= ba.TITLE_CHARS for line in lines))
-
-
 class GeneratedSvgs(unittest.TestCase):
     def setUp(self):
         committed = {f"articles/{p.name}": p.read_text(encoding="utf-8") for p in ARTICLES.glob("*.svg")}
-        self.files = {**ba.generated(), **article_cards(), **committed}
+        self.files = {**ba.generated(), **thumbnails(), **committed}
 
     def test_every_readme_image_exists(self):
         referenced = set(re.findall(r'(?:src|srcset)="(assets/[^"]+\.svg)"', README))
@@ -100,15 +83,17 @@ class GeneratedSvgs(unittest.TestCase):
                 self.assertEqual([title.get("id"), desc.get("id")], ids)
                 self.assertTrue(title.text and desc.text)
 
-    def test_article_card_shows_the_title_date_and_cover(self):
-        root = ET.fromstring(article_cards()["card"])
-        texts = [t.text for t in root.findall(f"{SVG}text")]  # the card's own text, not the cover's
-        self.assertIn("10 Oct, 2026", texts)
-        self.assertEqual(texts[0], "From a one-line request to a")
-        desc = root.find(f"{SVG}desc")
-        assert desc is not None and desc.text
-        self.assertIn("published 10 Oct, 2026. Cover: Illustration. On the left", desc.text)
-        self.assertEqual(len([s for s in root.iter(f"{SVG}svg")]), 2)  # the card and the nested cover
+    def test_thumbnail_is_the_cover_with_rounded_corners(self):
+        root = ET.fromstring(thumbnails()["thumbnail"])
+        self.assertEqual(root.get("viewBox"), "0 0 800 420")
+        title, desc = root.find(f"{SVG}title"), root.find(f"{SVG}desc")
+        assert title is not None and desc is not None and desc.text
+        self.assertEqual(title.text, "Cover: Spec-driven development in practice")
+        self.assertTrue(desc.text.startswith("Illustration. On the left"))  # the cover's own description
+        clip = root.find(f"{SVG}defs/{SVG}clipPath/{SVG}rect")
+        assert clip is not None
+        self.assertEqual(clip.get("rx"), str(ba.THUMB_RADIUS))
+        self.assertEqual(len(list(root.iter(f"{SVG}svg"))), 2)  # the frame and the nested cover
 
     def test_match_the_committed_files(self):
         for name, svg in ba.generated().items():

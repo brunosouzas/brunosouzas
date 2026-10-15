@@ -1,10 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="352" viewBox="0 0 400 352" role="img" aria-labelledby="pfa-t pfa-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
-  <title id="pfa-t">From a one-line request to a living spec: spec-driven development in practice</title>
-  <desc id="pfa-d">Article card: From a one-line request to a living spec: spec-driven development in practice, published 10 Oct, 2026. Cover: Illustration. On the left, a small slip with a single line, labelled request. In the middle, a tall spec sheet, labelled spec: every row starts with a yellow question mark and ends with a green tick, the open questions written down and answered, and a green GO stamp sits on its corner. On the right, a dark code block, labelled code, that the arrow only reaches after the stamp.</desc>
-  <rect x="8" y="8" width="390" height="342" rx="18" fill="#0A1033"/>
-  <rect x="2" y="2" width="390" height="342" rx="18" fill="#FFFFFF" stroke="#0A1033" stroke-width="3"/>
-  <defs><clipPath id="pfa-c"><rect x="18" y="18" width="358" height="188" rx="10"/></clipPath></defs>
-  <g clip-path="url(#pfa-c)"><svg x="18" y="18" width="358" height="188" viewBox="0 0 800 420"><defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-labelledby="pfa-t pfa-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <title id="pfa-t">Cover: From a one-line request to a living spec: spec-driven development in practice</title>
+  <desc id="pfa-d">Illustration. On the left, a small slip with a single line, labelled request. In the middle, a tall spec sheet, labelled spec: every row starts with a yellow question mark and ends with a green tick, the open questions written down and answered, and a green GO stamp sits on its corner. On the right, a dark code block, labelled code, that the arrow only reaches after the stamp.</desc>
+  <defs><clipPath id="pfa-c"><rect width="800" height="420" rx="24"/></clipPath></defs>
+  <g clip-path="url(#pfa-c)"><svg x="0" y="0" width="800" height="420" viewBox="0 0 800 420"><defs>
     <clipPath id="sdd-frame"><rect width="800" height="420" /></clipPath>
   </defs>
 
@@ -91,7 +89,4 @@
     <text x="677" y="147">code</text>
   </g>
 </svg></g>
-  <rect x="18" y="18" width="358" height="188" rx="10" fill="none" stroke="#0A1033" stroke-width="3"/>
-  <text x="18" y="240" font-size="20" font-weight="800" fill="#0A1033">From a one-line request to a</text><text x="18" y="266" font-size="20" font-weight="800" fill="#0A1033">living spec: spec-driven</text><text x="18" y="292" font-size="20" font-weight="800" fill="#0A1033">development in practice</text>
-  <text x="18" y="322" font-size="16" font-weight="700" fill="#4A5578">10 Oct, 2026</text>
 </svg>

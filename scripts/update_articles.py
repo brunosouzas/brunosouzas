@@ -2,11 +2,12 @@
 """Refresh the latest articles in README.md from the site's RSS feed.
 
 For each of the newest articles, the script downloads its cover (the feed's
-media:content), draws a card in the README style (light and dark) into
-assets/articles/, and rewrites the README block between
-<!-- articles:start --> and <!-- articles:end --> to show those cards.
+media:content), saves it as a rounded thumbnail in assets/articles/, and
+rewrites the README block between <!-- articles:start --> and
+<!-- articles:end -->: one row per article, the thumbnail on the left and the
+title, date and description on the right, as the site lists its articles.
 
-It writes only what changed and removes the cards of articles that left the
+It writes only what changed and removes the thumbnails of articles that left the
 list, so the scheduled workflow commits only when a new article is out.
 
 Usage: python3 scripts/update_articles.py [--feed URL] [--limit N]
@@ -36,6 +37,7 @@ FEED_URL = "https://brunosouzas.com/rss.xml"
 START = "<!-- articles:start -->"
 END = "<!-- articles:end -->"
 LIMIT = 4
+THUMB_WIDTH = 200
 TIMEOUT_S = 20
 MEDIA = "{http://search.yahoo.com/mrss/}content"
 # The workflow commits what the feed says straight to main: accept only the site's own addresses.
@@ -52,6 +54,7 @@ class Article:
     link: str
     date: str  # as the site shows it: "15 Oct, 2026"
     cover: str
+    description: str = ""
 
     @property
     def slug(self) -> str:
@@ -72,6 +75,7 @@ def parse_feed(xml_text: str, limit: int = LIMIT) -> list[Article]:
     articles = []
     for item in channel.findall("item")[:limit]:
         title = " ".join((item.findtext("title") or "").split())
+        description = " ".join((item.findtext("description") or "").split())
         link = (item.findtext("link") or "").strip()
         pub_date = (item.findtext("pubDate") or "").strip()
         media = item.find(MEDIA)
@@ -88,6 +92,7 @@ def parse_feed(xml_text: str, limit: int = LIMIT) -> list[Article]:
             site_url(link, "link"),
             f"{published.day} {published:%b}, {published.year}",
             site_url(cover, "cover"),
+            description,
         )
         if not SLUG.match(article.slug):
             raise ValueError(f"feed link does not end in a slug: {link!r}")
@@ -98,31 +103,36 @@ def parse_feed(xml_text: str, limit: int = LIMIT) -> list[Article]:
 
 
 def cards(article: Article, cover_svg: str) -> dict[str, str]:
-    """The light and dark card files of one article, by file name."""
+    """The thumbnail file of one article, by file name."""
     if DTD.search(cover_svg):
         raise ValueError(f"cover of {article.slug} has a DTD, which is not allowed")
     issues = ba.problems(cover_svg)
     if issues:
         raise ValueError(f"cover of {article.slug} would not render on GitHub: {', '.join(issues)}")
-    files = {
-        f"{article.slug}{suffix}.svg": ba.article_card(cover_svg, article.title, article.date, theme)
-        for suffix, theme in ba.THEMES
-    }
+    files = {f"{article.slug}.svg": ba.thumbnail(cover_svg, article.title)}
     for name, svg in files.items():  # check what is written, not only what was read
         if ba.problems(svg):
-            raise ValueError(f"card {name} would not render on GitHub: {', '.join(ba.problems(svg))}")
+            raise ValueError(f"thumbnail {name} would not render on GitHub: {', '.join(ba.problems(svg))}")
     return files
 
 
 def render(articles: list[Article]) -> str:
-    """The README block: one linked card per article, light and dark."""
-    return "\n".join(
-        f'<a href="{a.link}"><picture>'
-        f'<source media="(prefers-color-scheme: dark)" srcset="assets/articles/{a.slug}-dark.svg">'
-        f'<img src="assets/articles/{a.slug}.svg" width="49%" alt="{escape(a.title)} ({a.date})">'
-        f"</picture></a>"
-        for a in articles
-    )
+    """The README block: one row per article, as raw HTML so GitHub does not reformat the feed text.
+
+    Each row floats the linked thumbnail left of the linked title, the date and the
+    description; a rule separates the rows, as on the site's article lists.
+    """
+    rows = []
+    for a in articles:
+        description = f"<br>{escape(a.description)}" if a.description else ""
+        rows.append(
+            f'<p><a href="{a.link}"><img align="left" width="{THUMB_WIDTH}" '
+            f'src="assets/articles/{a.slug}.svg" alt="Cover: {escape(a.title)}"></a>'
+            f'<a href="{a.link}"><b>{escape(a.title)}</b></a><br>'
+            f"<sub>{a.date}</sub>{description}</p>\n"
+            f'<br clear="left">'
+        )
+    return "\n<hr>\n".join(rows)
 
 
 def replace_block(readme: str, block: str) -> str:

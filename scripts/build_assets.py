@@ -10,8 +10,8 @@ site. This script draws:
 - assets/link-<slug>.svg and -dark.svg: the buttons (All articles, site,
   LinkedIn, email).
 
-It also holds the article card that scripts/update_articles.py draws for each
-of the latest articles, so all the README images share one style.
+It also holds the article thumbnail (the site's cover with rounded corners)
+that scripts/update_articles.py draws for each of the latest articles.
 
 GitHub shows README images through <img>, so every SVG is self-contained:
 no external references, no CSS, no scripts, fixed colours only.
@@ -24,7 +24,6 @@ Usage: python3 scripts/build_assets.py
 from __future__ import annotations
 
 import re
-import textwrap
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from html import escape
@@ -244,53 +243,22 @@ def link(item: Link, theme: Theme, dark: bool) -> str:
     return document(item.width, LINK_H, "lk", item.label, f"Button: {item.label}.", body)
 
 
-# Article card -------------------------------------------------------------------
+# Article thumbnail ----------------------------------------------------------------
 
-ARTICLE_W, ARTICLE_H = 400, 352
-COVER_X, COVER_Y, COVER_W = 18, 18, 358
-COVER_H = round(COVER_W * 420 / 800)  # the site's cover ratio, 800x420
-TITLE_SIZE, TITLE_LEAD, TITLE_LINES = 20, 26, 3
-TITLE_CHARS = 31  # about 358 px of Lato (or Arial) bold at 20 px
+COVER_W, COVER_H = 800, 420  # the site's cover canvas
+THUMB_RADIUS = 24  # the site's rounded cover corners, at cover scale
 
 
-def title_lines(title: str) -> list[str]:
-    """The title wrapped on words to fit the card, at most TITLE_LINES lines."""
-    lines = textwrap.wrap(title, TITLE_CHARS, break_long_words=True)
-    if len(lines) > TITLE_LINES:
-        lines = lines[:TITLE_LINES]
-        lines[-1] = textwrap.shorten(lines[-1] + " …", TITLE_CHARS, placeholder=" …")
-    return lines
-
-
-def article_card(cover_svg: str, title: str, date: str, theme: Theme) -> str:
-    """One latest-article card: the site's cover, the title and the date."""
+def thumbnail(cover_svg: str, title: str) -> str:
+    """The article's cover with rounded corners, as the site lists it next to the title."""
     cover = ET.fromstring(cover_svg)
     cover_desc = next((e.text or "" for e in cover if tag(e) == "desc"), "").strip()
-    first = COVER_Y + COVER_H + 34
-    texts = "".join(
-        f'<text x="{COVER_X}" y="{first + i * TITLE_LEAD}" font-size="{TITLE_SIZE}" font-weight="800" '
-        f'fill="{theme.text}">{escape(line)}</text>'
-        for i, line in enumerate(title_lines(title))
-    )
     body = (
-        card(ARTICLE_W, ARTICLE_H, theme)
-        + f'  <defs><clipPath id="pfa-c"><rect x="{COVER_X}" y="{COVER_Y}" width="{COVER_W}" '
-        f'height="{COVER_H}" rx="10"/></clipPath></defs>\n'
-        + f'  <g clip-path="url(#pfa-c)">{nested(cover, COVER_X, COVER_Y, COVER_W, COVER_H)}</g>\n'
-        + f'  <rect x="{COVER_X}" y="{COVER_Y}" width="{COVER_W}" height="{COVER_H}" rx="10" '
-        f'fill="none" stroke="{theme.outline}" stroke-width="3"/>\n'
-        + f"  {texts}\n"
-        + f'  <text x="{COVER_X}" y="{ARTICLE_H - 30}" font-size="16" font-weight="700" '
-        f'fill="{theme.muted}">{escape(date)}</text>'
+        f'  <defs><clipPath id="pfa-c"><rect width="{COVER_W}" height="{COVER_H}" rx="{THUMB_RADIUS}"/>'
+        f"</clipPath></defs>\n"
+        f'  <g clip-path="url(#pfa-c)">{nested(cover, 0, 0, COVER_W, COVER_H)}</g>'
     )
-    return document(
-        ARTICLE_W,
-        ARTICLE_H,
-        "pfa",
-        title,
-        f"Article card: {title}, published {date}. Cover: {cover_desc}",
-        body,
-    )
+    return document(COVER_W, COVER_H, "pfa", f"Cover: {title}", cover_desc or f"Cover of {title}.", body)
 
 
 # Files --------------------------------------------------------------------------
