@@ -154,7 +154,7 @@ class Render(unittest.TestCase):
         block = ua.render([article])
         self.assertIn('alt="Cover: &lt;b&gt;&quot;x&quot;&lt;/b&gt;"', block)
         self.assertIn("<b>&lt;b&gt;&quot;x&quot;&lt;/b&gt;</b>", block)
-        self.assertIn("<br>&lt;i&gt;d&lt;/i&gt;</p>", block)
+        self.assertIn('<br>&lt;i&gt;d&lt;/i&gt;<br clear="left"></p>', block)
 
 
 class ReplaceBlock(unittest.TestCase):
