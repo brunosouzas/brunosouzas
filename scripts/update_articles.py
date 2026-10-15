@@ -42,6 +42,8 @@ MEDIA = "{http://search.yahoo.com/mrss/}content"
 SITE = "https://brunosouzas.com/"
 UNSAFE_IN_URL = set(" \t\n\"'()<>")
 SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+# The parser expands DTD entities, which could hide markup from the checks on the raw text.
+DTD = re.compile(r"<!DOCTYPE|<!ENTITY", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -97,13 +99,19 @@ def parse_feed(xml_text: str, limit: int = LIMIT) -> list[Article]:
 
 def cards(article: Article, cover_svg: str) -> dict[str, str]:
     """The light and dark card files of one article, by file name."""
+    if DTD.search(cover_svg):
+        raise ValueError(f"cover of {article.slug} has a DTD, which is not allowed")
     issues = ba.problems(cover_svg)
     if issues:
         raise ValueError(f"cover of {article.slug} would not render on GitHub: {', '.join(issues)}")
-    return {
+    files = {
         f"{article.slug}{suffix}.svg": ba.article_card(cover_svg, article.title, article.date, theme)
         for suffix, theme in ba.THEMES
     }
+    for name, svg in files.items():  # check what is written, not only what was read
+        if ba.problems(svg):
+            raise ValueError(f"card {name} would not render on GitHub: {', '.join(ba.problems(svg))}")
+    return files
 
 
 def render(articles: list[Article]) -> str:
@@ -126,9 +134,16 @@ def replace_block(readme: str, block: str) -> str:
     return f"{readme[: start + len(START)]}\n{block}\n{readme[end:]}"
 
 
+def check_final_url(requested: str, final: str) -> None:
+    """A request to the site must not be redirected away from it."""
+    if requested.startswith(SITE) and not final.startswith(SITE):
+        raise ValueError(f"{requested} redirected outside {SITE}: {final}")
+
+
 def fetch(url: str) -> str:
     request = urllib.request.Request(url, headers={"User-Agent": "brunosouzas-profile-readme"})
     with urllib.request.urlopen(request, timeout=TIMEOUT_S) as response:
+        check_final_url(url, response.geturl())
         return response.read().decode("utf-8")
 
 

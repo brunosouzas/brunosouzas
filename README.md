@@ -1,4 +1,4 @@
-<img src="assets/header.svg" width="100%" alt="Bruno Souza: integration, MuleSoft and AI-assisted engineering. Illustrated header from brunosouzas.com: APIs and servers feed an integration hub helped by an AI robot, the result passes CI/CD checks into the cloud.">
+<picture><img src="assets/header.svg" width="100%" alt="Bruno Souza: integration, MuleSoft and AI-assisted engineering. Illustrated header from brunosouzas.com: APIs and servers feed an integration hub helped by an AI robot, the result passes CI/CD checks into the cloud."></picture>
 
 ### Latest articles
 

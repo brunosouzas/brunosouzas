@@ -103,6 +103,27 @@ class Cards(unittest.TestCase):
         with self.assertRaises(ValueError):
             ua.cards(article, COVER_SVG.replace("<rect", '<image href="https://evil.example/x.png"/><rect'))
 
+    def test_rejects_a_cover_that_hides_markup_in_a_dtd_entity(self):
+        article = ua.parse_feed(FEED)[0]
+        cover = (
+            '<!DOCTYPE svg [<!ENTITY x "&#60;script&#62;alert(1)&#60;/script&#62;'
+            "&#60;image &#104;ref='https://evil.example/a.png'/&#62;\">]>"
+            + COVER_SVG.replace("</svg>", "&x;</svg>")
+        )
+        self.assertEqual(ua.ba.problems(cover), [])  # the raw text looks clean
+        with self.assertRaises(ValueError):
+            ua.cards(article, cover)
+
+
+class FinalUrl(unittest.TestCase):
+    def test_accepts_a_redirect_within_the_site(self):
+        ua.check_final_url("https://brunosouzas.com/rss.xml", "https://brunosouzas.com/rss.xml/")
+
+    def test_rejects_a_redirect_away_from_the_site(self):
+        for final in ("https://evil.example/c.svg", "http://brunosouzas.com/c.svg"):
+            with self.subTest(final=final), self.assertRaises(ValueError):
+                ua.check_final_url("https://brunosouzas.com/_astro/c.svg", final)
+
 
 class Render(unittest.TestCase):
     def test_links_each_card_with_light_and_dark_images(self):

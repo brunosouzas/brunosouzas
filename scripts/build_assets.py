@@ -306,9 +306,15 @@ def generated() -> dict[str, str]:
 
 
 def main() -> None:
-    for name, content in generated().items():
+    files = generated()
+    for name, content in files.items():
         (OUTPUT / name).write_text(content, encoding="utf-8")
         print(f"wrote assets/{name}")
+    # The top level of assets/ belongs to this script: drop what it no longer draws.
+    for old in sorted(OUTPUT.glob("*.svg")):
+        if old.name not in files:
+            old.unlink()
+            print(f"removed assets/{old.name}")
 
 
 if __name__ == "__main__":

@@ -12,6 +12,8 @@ import build_assets as ba  # noqa: E402
 
 COVER = (ba.SOURCE / "home-banner.svg").read_text(encoding="utf-8")  # any site illustration
 SVG = "{http://www.w3.org/2000/svg}"
+ARTICLES = ba.OUTPUT / "articles"
+README = (ba.ROOT / "README.md").read_text(encoding="utf-8")
 
 
 def article_cards() -> dict[str, str]:
@@ -57,13 +59,24 @@ class TitleLines(unittest.TestCase):
 
 class GeneratedSvgs(unittest.TestCase):
     def setUp(self):
-        self.files = {**ba.generated(), **article_cards()}
+        committed = {f"articles/{p.name}": p.read_text(encoding="utf-8") for p in ARTICLES.glob("*.svg")}
+        self.files = {**ba.generated(), **article_cards(), **committed}
 
     def test_every_readme_image_exists(self):
-        readme = (ba.ROOT / "README.md").read_text(encoding="utf-8")
-        referenced = set(re.findall(r'(?:src|srcset)="(assets/[^"]+\.svg)"', readme))
+        referenced = set(re.findall(r'(?:src|srcset)="(assets/[^"]+\.svg)"', README))
         self.assertTrue(referenced)
         self.assertEqual({p for p in referenced if not (ba.ROOT / p).is_file()}, set())
+
+    def test_every_committed_card_is_shown(self):
+        referenced = set(re.findall(r'(?:src|srcset)="assets/articles/([^"]+\.svg)"', README))
+        self.assertEqual({p.name for p in ARTICLES.glob("*.svg")}, referenced)
+
+    def test_assets_top_level_is_exactly_what_the_script_draws(self):
+        self.assertEqual({p.name for p in ba.OUTPUT.glob("*.svg")}, set(ba.generated()))
+
+    def test_header_is_not_a_link(self):
+        self.assertRegex(README, r'<picture><img src="assets/header\.svg"')
+        self.assertNotRegex(README, r'<a [^>]*>\s*(<picture>)?\s*<img src="assets/header\.svg"')
 
     def test_parse_as_xml(self):
         for name, svg in self.files.items():
