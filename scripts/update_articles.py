@@ -25,6 +25,9 @@ START = "<!-- articles:start -->"
 END = "<!-- articles:end -->"
 LIMIT = 5
 TIMEOUT_S = 20
+# The workflow commits what the feed says straight to main: accept only links to the site.
+SITE = "https://brunosouzas.com/"
+UNSAFE_IN_LINK = set(" \t\n()<>")
 
 
 @dataclass(frozen=True)
@@ -43,9 +46,14 @@ def parse_feed(xml_text: str, limit: int = LIMIT) -> list[Article]:
     for item in channel.findall("item")[:limit]:
         title = (item.findtext("title") or "").strip()
         link = (item.findtext("link") or "").strip()
+        pub_date = (item.findtext("pubDate") or "").strip()
         if not title or not link:
             raise ValueError("feed item without a title or a link")
-        published = parsedate_to_datetime(item.findtext("pubDate") or "")
+        if not link.startswith(SITE) or UNSAFE_IN_LINK & set(link):
+            raise ValueError(f"feed link outside {SITE} or not safe in Markdown: {link!r}")
+        if not pub_date:
+            raise ValueError(f"feed item without a pubDate: {title!r}")
+        published = parsedate_to_datetime(pub_date)
         date = f"{published.day} {published:%b}, {published.year}"
         articles.append(Article(title, link, date))
     if not articles:
@@ -54,8 +62,8 @@ def parse_feed(xml_text: str, limit: int = LIMIT) -> list[Article]:
 
 
 def markdown_text(text: str) -> str:
-    """Escape the characters that would break a Markdown link text."""
-    for char in "\\[]":
+    """Escape the characters that would break a Markdown link text or open an HTML tag."""
+    for char in "\\[]<>":
         text = text.replace(char, f"\\{char}")
     return text
 

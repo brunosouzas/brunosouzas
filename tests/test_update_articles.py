@@ -1,6 +1,7 @@
 import sys
 import unittest
 from pathlib import Path
+from xml.sax.saxutils import escape
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
@@ -56,11 +57,34 @@ class ParseFeed(unittest.TestCase):
         with self.assertRaises(ValueError):
             ua.parse_feed("<html><body/></html>")
 
+    def test_rejects_an_item_without_a_date(self):
+        feed = "<rss><channel><item><title>T</title><link>https://brunosouzas.com/blog/t/</link></item></channel></rss>"
+        with self.assertRaises(ValueError):
+            ua.parse_feed(feed)
+
+    def test_rejects_links_outside_the_site_or_unsafe_in_markdown(self):
+        for link in (
+            "https://evil.example/blog/t/",
+            "http://brunosouzas.com/blog/t/",
+            "https://brunosouzas.com.evil.example/t/",
+            "https://brunosouzas.com/blog/t)<script>/",
+        ):
+            feed = (
+                f"<rss><channel><item><title>T</title><link>{escape(link)}</link>"
+                "<pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate></item></channel></rss>"
+            )
+            with self.subTest(link=link), self.assertRaises(ValueError):
+                ua.parse_feed(feed)
+
 
 class Render(unittest.TestCase):
     def test_escapes_brackets_in_titles(self):
         line = ua.render([ua.Article("Arrays [and] lists", "https://x/", "1 Jan, 2026")])
         self.assertEqual(line, "- [Arrays \\[and\\] lists](https://x/) · 1 Jan, 2026")
+
+    def test_escapes_html_in_titles(self):
+        line = ua.render([ua.Article("<img src=x>", "https://x/", "1 Jan, 2026")])
+        self.assertEqual(line, "- [\\<img src=x\\>](https://x/) · 1 Jan, 2026")
 
 
 class ReplaceBlock(unittest.TestCase):
@@ -96,6 +120,24 @@ class Main(unittest.TestCase):
                 mtime = readme.stat().st_mtime_ns
                 self.assertEqual(ua.main(["--readme", str(readme)]), 0)
                 self.assertEqual(readme.stat().st_mtime_ns, mtime)
+        finally:
+            ua.fetch = original_fetch
+
+    def test_leaves_the_readme_untouched_when_the_fetch_fails(self):
+        import tempfile
+
+        def failing_fetch(url):
+            raise OSError("network down")
+
+        original_fetch = ua.fetch
+        ua.fetch = failing_fetch
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                readme = Path(tmp) / "README.md"
+                readme.write_text(README, encoding="utf-8")
+                with self.assertRaises(OSError):
+                    ua.main(["--readme", str(readme)])
+                self.assertEqual(readme.read_text(encoding="utf-8"), README)
         finally:
             ua.fetch = original_fetch
 

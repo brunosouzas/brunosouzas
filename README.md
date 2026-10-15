@@ -6,7 +6,7 @@
 
 I'm an integration architect. I work with MuleSoft, APIs and CI/CD, and outside work I study how to use AI agents in software development.
 
-I write about what happens between systems on **[brunosouzas.com](https://brunosouzas.com/)**: I take an idea everyone repeats, such as SOLID, retries or GitFlow, and see what is left of it once it meets a real Mule application. The code behind each article lives here, public and tested.
+I write about what happens between systems on **[brunosouzas.com](https://brunosouzas.com/)**: I take an idea everyone repeats, such as SOLID, retries or GitFlow, and see what is left of it once it meets a real Mule application. When an article has code, it is public on GitHub and tested; the table below lists it.
 
 <br clear="right">
 
@@ -38,7 +38,7 @@ I write about what happens between systems on **[brunosouzas.com](https://brunos
 | [azure-devops-mulesoft-pipelines](https://github.com/brunosouzas/azure-devops-mulesoft-pipelines) | Azure Pipelines templates: GitFlow, maven-release-plugin and CloudHub 2.0 deployments with approvals | [Delivering MuleSoft applications with Azure DevOps](https://brunosouzas.com/blog/series/mulesoft-delivery-azure-devops) |
 | [mulesoft-orders-api](https://github.com/brunosouzas/mulesoft-orders-api) | Reference Mule 4 app delivered by those pipelines | [Delivering MuleSoft applications with Azure DevOps](https://brunosouzas.com/blog/series/mulesoft-delivery-azure-devops) |
 | [spec-driven-delivery-api](https://github.com/brunosouzas/spec-driven-delivery-api) | A Mule 4 API built spec-first with OpenSpec, then evolved through a delta | [Spec-driven development in practice](https://brunosouzas.com/blog/spec-driven-development-in-practice) |
-| [ai-assisted-engineering-lab](https://github.com/brunosouzas/ai-assisted-engineering-lab) | The lab behind the AI engineering articles | [When AI Writes the Code, the Engineer's Work Moves](https://brunosouzas.com/blog/where-the-work-moves) |
+| [ai-assisted-engineering-lab](https://github.com/brunosouzas/ai-assisted-engineering-lab) | Synthetic Mule 4 lab for reproducible AI-assisted engineering exercises | [When AI Writes the Code, the Engineer's Work Moves](https://brunosouzas.com/blog/where-the-work-moves) |
 
 ### Find me
 

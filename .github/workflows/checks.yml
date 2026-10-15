@@ -21,7 +21,8 @@ jobs:
       - name: Generated images match their sources
         run: |
           python3 scripts/build_assets.py
-          git diff --exit-code -- assets/ || {
+          if [ -n "$(git status --porcelain -- assets/)" ]; then
+            git status --short -- assets/
             echo "::error::assets/ is out of date: run python3 scripts/build_assets.py and commit the result."
             exit 1
-          }
+          fi
