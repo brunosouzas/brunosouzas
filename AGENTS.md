@@ -19,7 +19,8 @@ No dependency manifest: the scripts use only the Python standard library. The wo
 - `tests/`: `python3 -m unittest discover -s tests`.
 - `.github/workflows/checks.yml`: on pull requests and on `main`, runs the tests and fails when `assets/` is not what the script builds.
 - `.github/workflows/latest-articles.yml`: daily (and on demand, from `main`), refreshes the list and thumbnails and commits to `main` only when they changed.
-- `techDocs/`: Backstage TechDocs for `catalog-info.yaml`.
+
+The repository holds only what the README uses or what builds and checks it; remove a file when nothing uses it any more.
 
 GitHub images in the README go through `<img>`: every SVG must be self-contained (no external references, no CSS, no scripts, fixed colours). Light and dark variants are switched with `<picture>` and `prefers-color-scheme`.
 
