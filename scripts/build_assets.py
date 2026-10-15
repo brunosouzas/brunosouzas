@@ -46,7 +46,6 @@ WHITE = "#FFFFFF"
 LIGHT_BLUE = "#8FB2FF"
 YELLOW = "#FFD25A"
 GREEN = "#3DDC84"
-MUTED = "#4A5578"
 # The site's dark-theme accents (category-*-dark.svg, social-*-dark.svg).
 DARK_SHADOW = "#4C5CB8"
 DARK_HALO = "#EEF1FF"
@@ -73,11 +72,10 @@ class Theme:
     outline: str
     shadow: str
     text: str
-    muted: str
 
 
-LIGHT = Theme(card=WHITE, outline=INK, shadow=INK, text=INK, muted=MUTED)
-DARK = Theme(card=NAVY, outline=DARK_SHADOW, shadow=DARK_SHADOW, text=WHITE, muted=LIGHT_BLUE)
+LIGHT = Theme(card=WHITE, outline=INK, shadow=INK, text=INK)
+DARK = Theme(card=NAVY, outline=DARK_SHADOW, shadow=DARK_SHADOW, text=WHITE)
 THEMES = (("", LIGHT), ("-dark", DARK))
 
 

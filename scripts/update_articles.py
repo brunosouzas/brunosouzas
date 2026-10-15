@@ -32,7 +32,7 @@ import build_assets as ba  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 README = ROOT / "README.md"
-CARDS = ROOT / "assets" / "articles"
+THUMBS = ROOT / "assets" / "articles"
 FEED_URL = "https://brunosouzas.com/rss.xml"
 START = "<!-- articles:start -->"
 END = "<!-- articles:end -->"
@@ -102,18 +102,18 @@ def parse_feed(xml_text: str, limit: int = LIMIT) -> list[Article]:
     return articles
 
 
-def cards(article: Article, cover_svg: str) -> dict[str, str]:
-    """The thumbnail file of one article, by file name."""
+def thumbnail_file(article: Article, cover_svg: str) -> tuple[str, str]:
+    """The thumbnail of one article: its file name and content."""
     if DTD.search(cover_svg):
         raise ValueError(f"cover of {article.slug} has a DTD, which is not allowed")
     issues = ba.problems(cover_svg)
     if issues:
         raise ValueError(f"cover of {article.slug} would not render on GitHub: {', '.join(issues)}")
-    files = {f"{article.slug}.svg": ba.thumbnail(cover_svg, article.title)}
-    for name, svg in files.items():  # check what is written, not only what was read
-        if ba.problems(svg):
-            raise ValueError(f"thumbnail {name} would not render on GitHub: {', '.join(ba.problems(svg))}")
-    return files
+    svg = ba.thumbnail(cover_svg, article.title)
+    issues = ba.problems(svg)  # check what is written, not only what was read
+    if issues:
+        raise ValueError(f"thumbnail of {article.slug} would not render on GitHub: {', '.join(issues)}")
+    return f"{article.slug}.svg", svg
 
 
 def render(articles: list[Article]) -> str:
@@ -129,8 +129,7 @@ def render(articles: list[Article]) -> str:
             f'<p><a href="{a.link}"><img align="left" width="{THUMB_WIDTH}" '
             f'src="assets/articles/{a.slug}.svg" alt="Cover: {escape(a.title)}"></a>'
             f'<a href="{a.link}"><b>{escape(a.title)}</b></a><br>'
-            f"<sub>{a.date}</sub>{description}</p>\n"
-            f'<br clear="left">'
+            f'<sub>{a.date}</sub>{description}<br clear="left"></p>'
         )
     return "\n<hr>\n".join(rows)
 
@@ -167,24 +166,22 @@ def write_if_changed(path: Path, content: str) -> bool:
 def update(
     feed_text: str,
     readme: Path,
-    cards_dir: Path,
+    thumbs_dir: Path,
     limit: int = LIMIT,
     get: Callable[[str], str] = fetch,
 ) -> list[str]:
-    """Bring the cards and the README block in step with the feed; return what changed."""
+    """Bring the thumbnails and the README block in step with the feed; return what changed."""
     articles = parse_feed(feed_text, limit)
     # Build everything before writing anything, so a bad item leaves the repository untouched.
-    files: dict[str, str] = {}
-    for article in articles:
-        files.update(cards(article, get(article.cover)))
+    files = dict(thumbnail_file(article, get(article.cover)) for article in articles)
     updated = replace_block(readme.read_text(encoding="utf-8"), render(articles))
 
     changed = []
-    cards_dir.mkdir(parents=True, exist_ok=True)
+    thumbs_dir.mkdir(parents=True, exist_ok=True)
     for name, content in files.items():
-        if write_if_changed(cards_dir / name, content):
+        if write_if_changed(thumbs_dir / name, content):
             changed.append(f"assets/articles/{name}")
-    for stale in sorted(cards_dir.glob("*.svg")):
+    for stale in sorted(thumbs_dir.glob("*.svg")):
         if stale.name not in files:
             stale.unlink()
             changed.append(f"assets/articles/{stale.name} (removed)")
@@ -199,7 +196,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--limit", type=int, default=LIMIT)
     args = parser.parse_args(argv)
 
-    changed = update(fetch(args.feed), README, CARDS, args.limit)
+    changed = update(fetch(args.feed), README, THUMBS, args.limit)
     print("\n".join(f"updated {c}" for c in changed) or "Latest articles already up to date.")
     return 0
 
