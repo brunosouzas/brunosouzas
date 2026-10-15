@@ -5,7 +5,7 @@ The GitHub profile page of Bruno Souza (github.com/brunosouzas), branded with th
 ## How it is built
 
 - `README.md` is the page: the header, the latest articles and the "Find me" buttons.
-- The latest articles are cards in `assets/articles/`, drawn by `scripts/update_articles.py` from the site's RSS feed (title, date and the cover in `media:content`), daily, by the `Latest articles` workflow.
+- The latest articles are a list written by `scripts/update_articles.py` from the site's RSS feed (title, date, description, and the cover in `media:content`, saved as a thumbnail in `assets/articles/`), daily, by the `Latest articles` workflow.
 - `assets/site/` holds copies of the site's artwork; `scripts/build_assets.py` composes them into the header and the buttons in `assets/`.
 - `python3 -m unittest discover -s tests` runs the tests; the `Checks` workflow runs them and checks that `assets/` matches the script's output.
 
