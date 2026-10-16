@@ -3,8 +3,14 @@ name: Latest articles
 # Keeps the "Latest articles" list in README.md and its thumbnails in
 # assets/articles/ in step with the RSS feed of brunosouzas.com. Commits to
 # main only when they changed.
+#
+# It runs when the site is published (the site's Azure pipelines send a
+# repository_dispatch "site-published" after the deploy), once a day as a
+# safety net in case that call fails, and on demand.
 
 on:
+  repository_dispatch:
+    types: [site-published]
   schedule:
     - cron: "17 6 * * *"
   workflow_dispatch:
