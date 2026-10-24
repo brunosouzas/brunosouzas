@@ -3,90 +3,85 @@
   <desc id="pfa-d">Illustration. On the left, a small slip with a single line, labelled request. In the middle, a tall spec sheet, labelled spec: every row starts with a yellow question mark and ends with a green tick, the open questions written down and answered, and a green GO stamp sits on its corner. On the right, a dark code block, labelled code, that the arrow only reaches after the stamp.</desc>
   <defs><clipPath id="pfa-c"><rect width="800" height="420" rx="24"/></clipPath></defs>
   <g clip-path="url(#pfa-c)"><svg x="0" y="0" width="800" height="420" viewBox="0 0 800 420"><defs>
-    <clipPath id="sdd-frame"><rect width="800" height="420" /></clipPath>
+    <clipPath id="sdd-frame">
+      <rect width="800" height="420" />
+    </clipPath>
   </defs>
-
-  
   <rect width="800" height="420" fill="#F6CFE0" />
-  <g clip-path="url(#sdd-frame)" fill="none" stroke="#ECBAD0" stroke-width="2">
-    <circle cx="400" cy="220" r="96" /><circle cx="400" cy="220" r="124" /><circle cx="400" cy="220" r="152" />
-    <circle cx="400" cy="220" r="180" /><circle cx="400" cy="220" r="208" /><circle cx="400" cy="220" r="236" />
-    <circle cx="400" cy="220" r="264" /><circle cx="400" cy="220" r="292" /><circle cx="400" cy="220" r="320" />
-    <circle cx="400" cy="220" r="348" /><circle cx="400" cy="220" r="376" /><circle cx="400" cy="220" r="404" />
-    <circle cx="400" cy="220" r="432" /><circle cx="400" cy="220" r="460" />
+  <g clip-path="url(#sdd-frame)">
+    <g fill="none" stroke="#ECBAD0" stroke-width="2">
+      <circle cx="395" cy="210" r="90" />
+      <circle cx="395" cy="210" r="118" />
+      <circle cx="395" cy="210" r="146" />
+      <circle cx="395" cy="210" r="174" />
+      <circle cx="395" cy="210" r="202" />
+      <circle cx="395" cy="210" r="230" />
+      <circle cx="395" cy="210" r="258" />
+      <circle cx="395" cy="210" r="286" />
+      <circle cx="395" cy="210" r="314" />
+      <circle cx="395" cy="210" r="342" />
+      <circle cx="395" cy="210" r="370" />
+      <circle cx="395" cy="210" r="398" />
+      <circle cx="395" cy="210" r="426" />
+      <circle cx="395" cy="210" r="454" />
+    </g>
   </g>
-
   <g stroke="#0A1033" stroke-width="4" stroke-linejoin="round">
-
-    
-    <path d="M52,186 Q52,174 64,174 H200 Q212,174 212,186 V236 Q212,248 200,248 H96 L72,268 L76,248 H64 Q52,248 52,236 Z" fill="#0A1033" transform="translate(10 10)" />
-    <path d="M52,186 Q52,174 64,174 H200 Q212,174 212,186 V236 Q212,248 200,248 H96 L72,268 L76,248 H64 Q52,248 52,236 Z" fill="#8FB2FF" />
-    <rect x="74" y="205" width="116" height="13" rx="6.5" fill="#FFFFFF" stroke="none" />
-
-    
-    <path d="M230,203 H252 V190 L280,215 L252,240 V227 H230 Z" fill="#1E6FEB" />
-    <path d="M532,203 H556 V190 L584,215 L556,240 V227 H532 Z" fill="#1E6FEB" />
-
-    
-    <rect x="300" y="112" width="200" height="222" rx="14" fill="#0A1033" transform="translate(10 10)" />
-    <rect x="300" y="112" width="200" height="222" rx="14" fill="#FFFFFF" />
+    <path d="M110,190 Q110,178 122,178 H222 Q234,178 234,190 V228 Q234,240 222,240 H154 L130,260 L134,240 H122 Q110,240 110,228 Z" fill="#0A1033" transform="translate(10 10)" />
+    <path d="M110,190 Q110,178 122,178 H222 Q234,178 234,190 V228 Q234,240 222,240 H154 L130,260 L134,240 H122 Q110,240 110,228 Z" fill="#8FB2FF" />
+    <rect x="132" y="209" width="80" height="13" rx="6.5" fill="#FFFFFF" stroke="none" />
+    <path d="M246,198 H266.24 V184 L292,210 L266.24,236 V222 H246 Z" fill="#1E6FEB" />
+    <rect x="304" y="110" width="186" height="190" rx="14" fill="#0A1033" transform="translate(10 10)" />
+    <rect x="304" y="110" width="186" height="190" rx="14" fill="#FFFFFF" />
     <g stroke-width="3">
-      <circle cx="330" cy="160" r="13" fill="#FFD25A" />
-      <circle cx="330" cy="200" r="13" fill="#FFD25A" />
-      <circle cx="330" cy="240" r="13" fill="#FFD25A" />
-      <circle cx="330" cy="280" r="13" fill="#FFD25A" />
-      <rect x="460" y="149" width="22" height="22" rx="5" fill="#3DDC84" />
-      <rect x="460" y="189" width="22" height="22" rx="5" fill="#3DDC84" />
-      <rect x="460" y="229" width="22" height="22" rx="5" fill="#3DDC84" />
+      <circle cx="334" cy="157" r="13" fill="#FFD25A" />
+      <rect x="450" y="146" width="22" height="22" rx="5" fill="#3DDC84" />
+      <circle cx="334" cy="189" r="13" fill="#FFD25A" />
+      <rect x="450" y="178" width="22" height="22" rx="5" fill="#3DDC84" />
+      <circle cx="334" cy="221" r="13" fill="#FFD25A" />
+      <rect x="450" y="210" width="22" height="22" rx="5" fill="#3DDC84" />
+      <circle cx="334" cy="253" r="13" fill="#FFD25A" />
+      <rect x="450" y="242" width="22" height="22" rx="5" fill="#3DDC84" />
     </g>
     <g fill="none" stroke-width="3.5" stroke-linecap="round">
-      <path d="M465,160 L470,166 L478,154" />
-      <path d="M465,200 L470,206 L478,194" />
-      <path d="M465,240 L470,246 L478,234" />
+      <path d="M455,157 L460,163 L468,151" stroke="#0A1033" />
+      <path d="M455,189 L460,195 L468,183" stroke="#0A1033" />
+      <path d="M455,221 L460,227 L468,215" stroke="#0A1033" />
+      <path d="M455,253 L460,259 L468,247" stroke="#0A1033" />
     </g>
     <g stroke="none" fill="#C9D6F5">
-      <rect x="352" y="155" width="94" height="10" rx="5" />
-      <rect x="352" y="195" width="76" height="10" rx="5" />
-      <rect x="352" y="235" width="88" height="10" rx="5" />
-      <rect x="352" y="275" width="60" height="10" rx="5" />
+      <rect x="356" y="152" width="76" height="10" rx="5" />
+      <rect x="356" y="184" width="60" height="10" rx="5" />
+      <rect x="356" y="216" width="70" height="10" rx="5" />
+      <rect x="356" y="248" width="54" height="10" rx="5" />
     </g>
-
-    
-    <g transform="rotate(-12 488 300)">
-      <circle cx="488" cy="300" r="40" fill="#0A1033" transform="translate(8 8)" />
-      <circle cx="488" cy="300" r="40" fill="#3DDC84" />
-      <circle cx="488" cy="300" r="30" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="6 5" />
+    <g transform="rotate(-12 494 300)">
+      <circle cx="494" cy="300" r="30" fill="#0A1033" transform="translate(8 8)" />
+      <circle cx="494" cy="300" r="30" fill="#3DDC84" />
+      <circle cx="494" cy="300" r="20" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="6 5" />
     </g>
-
-    
-    <rect x="602" y="140" width="150" height="152" rx="14" fill="#0A1033" transform="translate(10 10)" />
-    <rect x="602" y="140" width="150" height="152" rx="14" fill="#14215A" />
+    <path d="M512,198 H532.24 V184 L558,210 L532.24,236 V222 H512 Z" fill="#1E6FEB" />
+    <rect x="570" y="150" width="118" height="128" rx="14" fill="#0A1033" transform="translate(10 10)" />
+    <rect x="570" y="150" width="118" height="128" rx="14" fill="#14215A" />
     <g stroke="none">
-      <rect x="622" y="178" width="58" height="10" rx="5" fill="#3DDC84" />
-      <rect x="638" y="200" width="88" height="10" rx="5" fill="#8FB2FF" />
-      <rect x="638" y="222" width="64" height="10" rx="5" fill="#FFFFFF" />
-      <rect x="638" y="244" width="80" height="10" rx="5" fill="#8FB2FF" />
-      <rect x="622" y="266" width="44" height="10" rx="5" fill="#3DDC84" />
+      <rect x="590" y="184" width="54" height="10" rx="5" fill="#3DDC84" />
+      <rect x="602" y="204" width="66" height="10" rx="5" fill="#8FB2FF" />
+      <rect x="602" y="224" width="46" height="10" rx="5" fill="#FFFFFF" />
+      <rect x="590" y="244" width="40" height="10" rx="5" fill="#FF6B6B" />
     </g>
-
-    
-    <rect x="80" y="156" width="104" height="36" rx="18" fill="#FFFFFF" />
-    <rect x="360" y="94" width="80" height="36" rx="18" fill="#FFD25A" />
-    <rect x="637" y="122" width="80" height="36" rx="18" fill="#FFFFFF" />
-  </g>
-
-  
-  <g font-weight="900" fill="#0A1033" text-anchor="middle">
-    <text x="330" y="167" font-size="19">?</text>
-    <text x="330" y="207" font-size="19">?</text>
-    <text x="330" y="247" font-size="19">?</text>
-    <text x="330" y="287" font-size="19">?</text>
-    <text x="488" y="310" font-size="27" transform="rotate(-12 488 300)">GO</text>
+    <rect x="118" y="160" width="108" height="36" rx="18" fill="#FFFFFF" />
+    <rect x="359" y="92" width="76" height="36" rx="18" fill="#FFFFFF" />
+    <rect x="591" y="132" width="76" height="36" rx="18" fill="#FFFFFF" />
   </g>
   <g font-size="19" font-weight="800" fill="#0A1033" text-anchor="middle">
-    <text x="132" y="181">request</text>
-    <text x="400" y="119">spec</text>
-    <text x="677" y="147">code</text>
+    <text x="334" y="164" font-size="19" font-weight="900">?</text>
+    <text x="334" y="196" font-size="19" font-weight="900">?</text>
+    <text x="334" y="228" font-size="19" font-weight="900">?</text>
+    <text x="334" y="260" font-size="19" font-weight="900">?</text>
+    <text x="494" y="310" font-size="27" font-weight="900" transform="rotate(-12 494 300)">GO</text>
+    <text x="172" y="185">request</text>
+    <text x="397" y="117">spec</text>
+    <text x="629" y="157">code</text>
   </g>
 </svg></g>
 </svg>

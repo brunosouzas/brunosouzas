@@ -1,51 +1,68 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-labelledby="pfa-t pfa-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
   <title id="pfa-t">Cover: Write in Obsidian, Publish on Your Own Site</title>
-  <desc id="pfa-d">Illustration. A yellow folder labelled blog/ holds Markdown notes; one note flies out of it, with motion lines, into a browser window whose address is /blog/ and which shows the same note as a web page. A green price tag reading $0 hangs from the browser: one folder of the Obsidian vault becomes the blog, for free.</desc>
+  <desc id="pfa-d">Illustration. A yellow folder labelled blog/ holds Markdown notes; one note flies out of it, along a dashed trail, into a browser window whose address is /blog/ and which shows the same note as a web page. A green price tag reading $0 hangs from the browser: one folder of the Obsidian vault becomes the blog, for free.</desc>
   <defs><clipPath id="pfa-c"><rect width="800" height="420" rx="24"/></clipPath></defs>
-  <g clip-path="url(#pfa-c)"><svg x="0" y="0" width="800" height="420" viewBox="0 0 800 420"><defs><clipPath id="f"><rect width="800" height="420" /></clipPath></defs>
+  <g clip-path="url(#pfa-c)"><svg x="0" y="0" width="800" height="420" viewBox="0 0 800 420"><defs>
+    <clipPath id="wiop-frame">
+      <rect width="800" height="420" />
+    </clipPath>
+  </defs>
   <rect width="800" height="420" fill="#5B3CC4" />
-  <g clip-path="url(#f)" fill="none" stroke="#6748CF" stroke-width="2"><circle cx="400" cy="215" r="90" /><circle cx="400" cy="215" r="118" /><circle cx="400" cy="215" r="146" /><circle cx="400" cy="215" r="174" /><circle cx="400" cy="215" r="202" /><circle cx="400" cy="215" r="230" /><circle cx="400" cy="215" r="258" /><circle cx="400" cy="215" r="286" /><circle cx="400" cy="215" r="314" /><circle cx="400" cy="215" r="342" /><circle cx="400" cy="215" r="370" /><circle cx="400" cy="215" r="398" /><circle cx="400" cy="215" r="426" /><circle cx="400" cy="215" r="454" /></g>
-  <g stroke="#0A1033" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M110,150 L110,132 Q110,120 122,120 L176,120 Q186,120 190,130 L196,150 L288,150 Q300,150 300,162 L300,318 L110,318 Z" fill="#0A1033" transform="translate(10 10)" />
-    <path d="M110,150 L110,132 Q110,120 122,120 L176,120 Q186,120 190,130 L196,150 L288,150 Q300,150 300,162 L300,318 L110,318 Z" fill="#E8B830" />
-    <rect x="134" y="112" width="96" height="120" rx="8" fill="#FFFFFF" transform="rotate(-8 182 172)" />
-    <rect x="176" y="104" width="96" height="120" rx="8" fill="#FFFFFF" transform="rotate(6 224 164)" />
-    <path d="M104,184 Q104,172 116,172 L294,172 Q306,172 306,184 L300,318 L110,318 Z" fill="#FFD25A" />
-    <path d="M336,120 L392,112 Q400,111 401,119 L410,196 Q411,204 403,205 L347,212 Q339,213 338,205 L329,128 Q328,121 336,120 Z" fill="#0A1033" transform="translate(10 10)" />
-    <path d="M336,120 L392,112 Q400,111 401,119 L410,196 Q411,204 403,205 L347,212 Q339,213 338,205 L329,128 Q328,121 336,120 Z" fill="#FFFFFF" />
-    <rect x="440" y="104" width="250" height="216" rx="16" fill="#0A1033" transform="translate(10 10)" />
-    <rect x="440" y="104" width="250" height="216" rx="16" fill="#FFFFFF" />
-    <path d="M440,150 L440,120 Q440,104 456,104 L674,104 Q690,104 690,120 L690,150 Z" fill="#3DDC84" />
-    <rect x="464" y="170" width="202" height="62" rx="8" fill="#8FB2FF" />
-    <circle cx="628" cy="194" r="12" fill="#FFD25A" />
-    <path d="M690,312 L742,312 Q750,312 750,320 L750,356 Q750,364 742,364 L690,364 L672,338 Z" fill="#0A1033" transform="translate(10 10)" />
-    <path d="M690,312 L742,312 Q750,312 750,320 L750,356 Q750,364 742,364 L690,364 L672,338 Z" fill="#3DDC84" />
-    <circle cx="686" cy="338" r="5" fill="#FFFFFF" />
-    <rect x="118" y="98" width="92" height="36" rx="18" fill="#FFD25A" />
-    <rect x="500" y="86" width="120" height="36" rx="18" fill="#FFFFFF" />
-  </g>
-  <g fill="none" stroke="#0A1033" stroke-linecap="round">
-    <g transform="rotate(-7 370 162)">
-      <path d="M348,136 L388,136" stroke-width="6" opacity="1" />
-      <path d="M348,156 L394,156" stroke-width="5" opacity="0.55" />
-      <path d="M348,172 L382,172" stroke-width="5" opacity="0.55" />
-      <path d="M348,188 L390,188" stroke-width="5" opacity="0.55" />
+  <g clip-path="url(#wiop-frame)">
+    <g fill="none" stroke="#6748CF" stroke-width="2">
+      <circle cx="400" cy="215" r="90" />
+      <circle cx="400" cy="215" r="118" />
+      <circle cx="400" cy="215" r="146" />
+      <circle cx="400" cy="215" r="174" />
+      <circle cx="400" cy="215" r="202" />
+      <circle cx="400" cy="215" r="230" />
+      <circle cx="400" cy="215" r="258" />
+      <circle cx="400" cy="215" r="286" />
+      <circle cx="400" cy="215" r="314" />
+      <circle cx="400" cy="215" r="342" />
+      <circle cx="400" cy="215" r="370" />
+      <circle cx="400" cy="215" r="398" />
+      <circle cx="400" cy="215" r="426" />
+      <circle cx="400" cy="215" r="454" />
     </g>
-    <path d="M464,256 L614,256" stroke-width="7" opacity="1" />
-    <path d="M464,278 L650,278" stroke-width="5" opacity="0.55" />
-    <path d="M464,296 L624,296" stroke-width="5" opacity="0.55" />
-    <path d="M300,130 L318,128" stroke="#FFFFFF" stroke-width="5" />
-    <path d="M292,160 L310,158" stroke="#FFFFFF" stroke-width="5" />
-    <path d="M304,190 L322,188" stroke="#FFFFFF" stroke-width="5" />
-    <path d="M668,300 Q674,322 686,338" stroke-width="3" />
   </g>
-  <g stroke="#0A1033" stroke-width="3">
-    <circle cx="462" cy="127" r="6" fill="#FF6B6B" />
-    <circle cx="482" cy="127" r="6" fill="#FFD25A" />
-    <circle cx="502" cy="127" r="6" fill="#FFFFFF" />
+  <g stroke="#0A1033" stroke-width="4" stroke-linejoin="round">
+    <path d="M262,150 C300,96 370,100 394,150" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 8" />
+    <path d="M397.47,136.44 L394,150 L381.25,144.23" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M104,173.5 L104,158.2 Q104,148 114.2,148 L160.1,148 Q168.6,148 172,156.5 L177.1,173.5 L255.3,173.5 Q265.5,173.5 265.5,183.7 L265.5,316.3 L104,316.3 Z" fill="#0A1033" transform="translate(10 10)" />
+    <path d="M104,173.5 L104,158.2 Q104,148 114.2,148 L160.1,148 Q168.6,148 172,156.5 L177.1,173.5 L255.3,173.5 Q265.5,173.5 265.5,183.7 L265.5,316.3 L104,316.3 Z" fill="#E8B830" />
+    <rect x="124.4" y="141.2" width="81.6" height="102" rx="8" fill="#FFFFFF" transform="rotate(-8 165.2 192.2)" />
+    <rect x="160.1" y="134.4" width="81.6" height="102" rx="8" fill="#FFFFFF" transform="rotate(6 200.9 185.4)" />
+    <path d="M98.9,202.4 Q98.9,192.2 109.1,192.2 L260.4,192.2 Q270.6,192.2 270.6,202.4 L265.5,316.3 L104,316.3 Z" fill="#FFD25A" />
+    <rect x="292" y="170" width="80" height="88" rx="14" fill="#0A1033" transform="translate(10 10)" />
+    <rect x="292" y="170" width="80" height="88" rx="14" fill="#FFFFFF" />
+    <g stroke-width="3" />
+    <g fill="none" stroke-width="3.5" stroke-linecap="round" />
+    <g stroke="none" fill="#C9D6F5">
+      <rect x="314" y="202" width="34" height="10" rx="5" />
+      <rect x="314" y="226" width="24" height="10" rx="5" />
+      <rect x="314" y="250" width="30" height="10" rx="5" />
+    </g>
+    <rect x="400" y="140" width="210" height="170" rx="12" fill="#0A1033" transform="translate(10 10)" />
+    <rect x="400" y="140" width="210" height="170" rx="12" fill="#FFFFFF" />
+    <path d="M400,170 H610" fill="none" />
+    <circle cx="418" cy="155" r="5" fill="#FF6B6B" stroke-width="2.5" />
+    <circle cx="434" cy="155" r="5" fill="#FFD25A" stroke-width="2.5" />
+    <circle cx="450" cy="155" r="5" fill="#3DDC84" stroke-width="2.5" />
+    <rect x="420" y="186" width="170" height="40" rx="8" fill="#8FB2FF" stroke-width="3" />
+    <rect x="420" y="240" width="126" height="10" rx="5" fill="#C9D6F5" stroke="none" />
+    <rect x="420" y="258" width="84" height="10" rx="5" fill="#C9D6F5" stroke="none" />
+    <path d="M598,262 C584,276 620,294 638,290" fill="none" stroke="#FFFFFF" stroke-width="4" />
+    <path d="M638,266 L688,266 Q698,266 698,276 L698,304 Q698,314 688,314 L638,314 L618,290 Z" fill="#0A1033" transform="translate(6 6)" />
+    <path d="M638,266 L688,266 Q698,266 698,276 L698,304 Q698,314 688,314 L638,314 L618,290 Z" fill="#3DDC84" />
+    <circle cx="634" cy="290" r="5" fill="#0A1033" stroke="none" />
+    <rect x="141.5" y="298" width="87" height="36" rx="18" fill="#FFFFFF" />
+    <rect x="499.5" y="122" width="97" height="36" rx="18" fill="#FFFFFF" />
   </g>
-  <text x="164" y="123" font-size="19" font-weight="800" fill="#0A1033" text-anchor="middle" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">blog/</text>
-  <text x="560" y="111" font-size="19" font-weight="800" fill="#0A1033" text-anchor="middle" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">/blog/</text>
-  <text x="718" y="345" font-size="21" font-weight="800" fill="#0A1033" text-anchor="middle">$0</text>
+  <g font-size="19" font-weight="800" fill="#0A1033" text-anchor="middle">
+    <text x="666" y="298" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="22">$0</text>
+    <text x="185" y="323">blog/</text>
+    <text x="548" y="147">/blog/</text>
+  </g>
 </svg></g>
 </svg>
