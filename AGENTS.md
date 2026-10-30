@@ -5,6 +5,10 @@
 GitHub profile repository: its README is the page shown on github.com/brunosouzas. It has three parts, all in the brand of brunosouzas.com: the header (the site's home banner), the latest articles as a list (cover thumbnail beside the title, date and description, as the site lists them), and the "Find me" buttons. Anything else lives on the site.
 
 Stack: Markdown, SVG, Python 3 (standard library only, `unittest`), GitHub Actions
+Delivery: A live
+Integration branch: `main`
+Trivial: none
+Deliver and verify: GitHub shows `main` on the profile at once; verify that the `checks.yml` run on `main` is green and https://github.com/brunosouzas shows the change
 
 ## Technology declarations
 
