@@ -8,7 +8,7 @@ Stack: Markdown, SVG, Python 3 (standard library only, `unittest`), GitHub Actio
 Delivery: A live
 Integration branch: `main`
 Trivial: none
-Deliver and verify: GitHub shows `main` on the profile at once; verify the page https://github.com/brunosouzas
+Deliver and verify: GitHub shows `main` on the profile at once; verify that the `checks.yml` run on `main` is green and https://github.com/brunosouzas shows the change
 
 ## Technology declarations
 
