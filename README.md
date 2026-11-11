@@ -1,4 +1,4 @@
-<picture><img src="assets/header.svg" width="100%" alt="Bruno Souza: integration, MuleSoft and AI-assisted engineering. Illustrated header from brunosouzas.com: APIs and servers feed an integration hub helped by an AI robot, the result passes CI/CD checks into the cloud."></picture>
+<picture><img src="assets/header.svg" width="100%" alt="Bruno Souza, brunosouzas.com: integration, delivery, AI engineering and personal tools. The home banner of brunosouzas.com: four soft tiles in the tones of the site's four tracks, joined by an ink line, with Mira pointing her needle into the first."></picture>
 
 ### Latest articles
 

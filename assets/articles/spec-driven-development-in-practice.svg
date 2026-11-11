@@ -1,15 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-labelledby="pfa-t pfa-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-labelledby="pfa-t pfa-d" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif">
   <title id="pfa-t">Cover: From a one-line request to a living spec: spec-driven development in practice</title>
-  <desc id="pfa-d">Illustration. On the left, a small slip with a single line, labelled request. In the middle, a tall spec sheet, labelled spec: every row starts with a yellow question mark and ends with a green tick, the open questions written down and answered, and a green GO stamp sits on its corner. On the right, a dark code block, labelled code, that the arrow only reaches after the stamp.</desc>
+  <desc id="pfa-d">Illustration. On the left, a small slip with a single line, labelled request. In the middle, a tall spec sheet, labelled spec: every row starts with a question mark and ends with a green tick, the open questions written down and answered, and a green GO stamp sits on its corner. On the right, a dark code block, labelled code, that the arrow only reaches after the stamp.</desc>
   <defs><clipPath id="pfa-c"><rect width="800" height="420" rx="24"/></clipPath></defs>
-  <g clip-path="url(#pfa-c)"><svg x="0" y="0" width="800" height="420" viewBox="0 0 800 420"><defs>
+  <g clip-path="url(#pfa-c)"><svg x="0" y="0" width="800" height="420" viewBox="0 0 800 420"><style>@font-face{font-family:'Source Sans 3';font-weight:550 799;font-style:normal;src:url(data:font/ttf;base64,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) format('truetype')}
+@font-face{font-family:'Source Sans 3';font-weight:800 900;font-style:normal;src:url(data:font/ttf;base64,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) format('truetype')}</style>
+  <defs>
     <clipPath id="sdd-frame">
       <rect width="800" height="420" />
     </clipPath>
   </defs>
-  <rect width="800" height="420" fill="#E2E4EC" />
+  <rect width="800" height="420" fill="#B5D5F2" />
   <g clip-path="url(#sdd-frame)">
-    <g fill="none" stroke="#C7C9D0" stroke-width="2">
+    <g fill="none" stroke="#94BBDE" stroke-width="2">
       <circle cx="395" cy="210" r="90" />
       <circle cx="395" cy="210" r="118" />
       <circle cx="395" cy="210" r="146" />
@@ -26,48 +28,44 @@
       <circle cx="395" cy="210" r="454" />
     </g>
   </g>
-  <g stroke="#0A1033" stroke-width="4" stroke-linejoin="round">
-    <path d="M110,190 Q110,178 122,178 H222 Q234,178 234,190 V228 Q234,240 222,240 H154 L130,260 L134,240 H122 Q110,240 110,228 Z" fill="#0A1033" transform="translate(10 10)" />
-    <path d="M110,190 Q110,178 122,178 H222 Q234,178 234,190 V228 Q234,240 222,240 H154 L130,260 L134,240 H122 Q110,240 110,228 Z" fill="#8FB2FF" />
-    <rect x="132" y="209" width="80" height="13" rx="6.5" fill="#FFFFFF" stroke="none" />
-    <path d="M246,198 H266.24 V184 L292,210 L266.24,236 V222 H246 Z" fill="#1E6FEB" />
-    <rect x="304" y="110" width="186" height="190" rx="14" fill="#0A1033" transform="translate(10 10)" />
+  <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+    <path d="M110,190 Q110,178 122,178 H222 Q234,178 234,190 V228 Q234,240 222,240 H154 L130,260 L134,240 H122 Q110,240 110,228 Z" fill="#FFFFFF" />
+    <rect x="132" y="209" width="80" height="13" rx="6.5" fill="#D7D1C5" stroke="none" />
+    <path d="M246,198 H266.24 V184 L292,210 L266.24,236 V222 H246 Z" fill="#E04E17" />
     <rect x="304" y="110" width="186" height="190" rx="14" fill="#FFFFFF" />
     <g stroke-width="3">
-      <circle cx="334" cy="157" r="13" fill="#FFD25A" />
+      <circle cx="334" cy="157" r="13" fill="#FFFFFF" />
       <rect x="450" y="146" width="22" height="22" rx="5" fill="#3DDC84" />
-      <circle cx="334" cy="189" r="13" fill="#FFD25A" />
+      <circle cx="334" cy="189" r="13" fill="#FFFFFF" />
       <rect x="450" y="178" width="22" height="22" rx="5" fill="#3DDC84" />
-      <circle cx="334" cy="221" r="13" fill="#FFD25A" />
+      <circle cx="334" cy="221" r="13" fill="#FFFFFF" />
       <rect x="450" y="210" width="22" height="22" rx="5" fill="#3DDC84" />
-      <circle cx="334" cy="253" r="13" fill="#FFD25A" />
+      <circle cx="334" cy="253" r="13" fill="#FFFFFF" />
       <rect x="450" y="242" width="22" height="22" rx="5" fill="#3DDC84" />
     </g>
     <g fill="none" stroke-width="3.5" stroke-linecap="round">
-      <path d="M455,157 L460,163 L468,151" stroke="#0A1033" />
-      <path d="M455,189 L460,195 L468,183" stroke="#0A1033" />
-      <path d="M455,221 L460,227 L468,215" stroke="#0A1033" />
-      <path d="M455,253 L460,259 L468,247" stroke="#0A1033" />
+      <path d="M455,157 L460,163 L468,151" stroke="#121212" />
+      <path d="M455,189 L460,195 L468,183" stroke="#121212" />
+      <path d="M455,221 L460,227 L468,215" stroke="#121212" />
+      <path d="M455,253 L460,259 L468,247" stroke="#121212" />
     </g>
-    <g stroke="none" fill="#C9D6F5">
+    <g stroke="none" fill="#D7D1C5">
       <rect x="356" y="152" width="76" height="10" rx="5" />
       <rect x="356" y="184" width="60" height="10" rx="5" />
       <rect x="356" y="216" width="70" height="10" rx="5" />
       <rect x="356" y="248" width="54" height="10" rx="5" />
     </g>
     <g transform="rotate(-12 494 300)">
-      <circle cx="494" cy="300" r="30" fill="#0A1033" transform="translate(8 8)" />
       <circle cx="494" cy="300" r="30" fill="#3DDC84" />
       <circle cx="494" cy="300" r="20" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="6 5" />
     </g>
-    <path d="M512,198 H532.24 V184 L558,210 L532.24,236 V222 H512 Z" fill="#1E6FEB" />
-    <rect x="570" y="150" width="118" height="128" rx="14" fill="#0A1033" transform="translate(10 10)" />
-    <rect x="570" y="150" width="118" height="128" rx="14" fill="#14215A" />
+    <path d="M512,198 H532.24 V184 L558,210 L532.24,236 V222 H512 Z" fill="#E04E17" />
+    <rect x="570" y="150" width="118" height="128" rx="14" fill="#1D1C1A" />
     <g stroke="none">
-      <rect x="590" y="184" width="54" height="10" rx="5" fill="#3DDC84" />
-      <rect x="602" y="204" width="66" height="10" rx="5" fill="#8FB2FF" />
-      <rect x="602" y="224" width="46" height="10" rx="5" fill="#FFFFFF" />
-      <rect x="590" y="244" width="40" height="10" rx="5" fill="#FF6B6B" />
+      <rect x="590" y="184" width="54" height="10" rx="5" fill="#ADA79D" />
+      <rect x="602" y="204" width="66" height="10" rx="5" fill="#ADA79D" />
+      <rect x="602" y="224" width="46" height="10" rx="5" fill="#F1EEE8" />
+      <rect x="590" y="244" width="40" height="10" rx="5" fill="#ADA79D" />
     </g>
     <rect x="118" y="160" width="108" height="36" rx="18" fill="#FFFFFF" />
     <rect x="359" y="92" width="76" height="36" rx="18" fill="#FFFFFF" />
@@ -99,7 +97,7 @@
       </g>
     </g>
   </g>
-  <g font-size="19" font-weight="800" fill="#0A1033" text-anchor="middle">
+  <g font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
     <text x="334" y="164" font-size="19" font-weight="900">?</text>
     <text x="334" y="196" font-size="19" font-weight="900">?</text>
     <text x="334" y="228" font-size="19" font-weight="900">?</text>
