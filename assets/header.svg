@@ -1,131 +1,77 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="hd-t hd-d" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="hd-t hd-d" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif">
   <title id="hd-t">Bruno Souza, brunosouzas.com</title>
-  <desc id="hd-d">Illustration on the cream page. Four soft tiles in the tones of the site&#x27;s four tracks hold an object each: the courier ship on peach (integration), the walking crate on sage (delivery), the cable-armed hub on periwinkle (AI) and the lantern on butter (personal tools). An ink line joins them; Mira, on the left, points her needle into the first tile.</desc>
+  <desc id="hd-d">The slogan &quot;Code that runs for the problem you have.&quot; in three serif lines on the cream page, the brunosouzas symbol on the right, the badges of the four categories under the slogan, and the signature in the bottom-right corner.</desc>
+  <style>@font-face{font-family:'Source Serif 4';font-weight:100 900;font-style:normal;src:url(data:font/ttf;base64,AAEAAAAOAIAAAwBgQkFTRVT/bggAAAHcAAAARkdERUYAKgArAAAA7AAAABxHUE9TDU3zTQAABegAAAMuR1NVQvty7xMAAANgAAAAhk9TLzJfbnsQAAACJAAAAGBjbWFwAbECiQAAAuwAAAB0Z2x5ZrZtIwoAAAkYAAAMJGhlYWQm53R7AAABbAAAADZoaGVhC/oG4gAAAUgAAAAkaG10eDpYAmkAAAKEAAAAaGxvY2Ek8SIBAAABpAAAADZtYXhwACoA6AAAAQgAAAAgbmFtZUY/X/oAAAPoAAAB/nBvc3T/0QAyAAABKAAAACAAAQAAAAwAAAAAAAAAAgACAAIAEwABABQAGAACAAEAAAAaAIAABQBkAAcAAQAAAAAAAAAAAAAAAAADAAMAAwAAAAAAAP/OADIAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAEDP6xAAAJNf7e/uEJDQABAAAAAAAAAAAAAAAAAAAAGgABAAAABAFH8bNQOV8PPPUAAwPoAAAAAN/wnsYAAAAA3/CQvP7e/tAJDQQCAAEAAwACAAAAAAAAAAAAAAAAADQAiQDDAPkBLwFsAakByAIoAmYCkgLVAwwDSgNxA6IDwAPzBD8ElwUABXgF/AYSAAAAAQAAAAgAAAA0AAQABERGTFQAGmN5cmwAGmdyZWsAGmxhdG4AGgAGAAAAAAABAAIADAAIAAEAAAAB/1sAAmlkZW9yb21uAAAAAwJAArwABQAAAooCWAAAAEsCigJYAAABXgAyASEAAAIECAMFBAUCAgQAAAABAAAAAAAAAAAAAAAAQURCTwAgACAAeQQM/rEAAAQMAU8gAAGfAAAAAAHjAp4AAAAgAAMCgABQANYAAAJuACICEwAfAmIAFQJSAB0CCQAdAWoAFgJpABUBQwAVA4sAEwJoABMCNQAdAmMAFgHRABMBxwAeAWYACwJfABMCD//5Ahb//gKCABYCqgAWAqUAFgO9ABYD5QAWASwAPAAAAAIAAAADAAAAFAADAAEAAAAUAAQAYAAAABQAEAADAAQAIAAuAEMAYgBmAGgAcAB2AHn//wAAACAALgBDAGEAZABoAGwAcgB5////4f/r/7//ov+h/6D/nf+c/5oAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAKADAAPgAEREZMVAAaY3lybAAaZ3JlawAabGF0bgAaAAQAAAAA//8AAQAAAAFsaWdhAAgAAAABAAAAAQAEAAQAAAABAAgAAQA2AAEACAAFACYAHgAYABIADAAVAAIAEAAUAAIACQAWAAIABwAYAAMABwAQABcAAwAHAAkAAQABAAcAAAAAAAcAWgADAAEECQAAAJwBCAADAAEECQABABwA7AADAAEECQACAAgA5AADAAEECQADAEQAoAADAAEECQAEACYAegADAAEECQAFAFgAIgADAAEECQAGACIAAABTAG8AdQByAGMAZQBTAGUAcgBpAGYANAAtAEIAbwBsAGQAVgBlAHIAcwBpAG8AbgAgADQALgAwADAANQA7AGgAbwB0AGMAbwBuAHYAIAAxAC4AMQAuADAAOwBtAGEAawBlAG8AdABmAGUAeABlACAAMgAuADYALgAwAFMAbwB1AHIAYwBlACAAUwBlAHIAaQBmACAANAAgAEIAbwBsAGQANAAuADAAMAA1ADsAQQBEAEIATwA7AFMAbwB1AHIAYwBlAFMAZQByAGkAZgA0AC0AQgBvAGwAZAA7AEEARABPAEIARQBCAG8AbABkAFMAbwB1AHIAYwBlACAAUwBlAHIAaQBmACAANACpACAAMgAwADEANAAgAC0AIAAyADAAMgAzACAAQQBkAG8AYgBlACAAKABoAHQAdABwADoALwAvAHcAdwB3AC4AYQBkAG8AYgBlAC4AYwBvAG0ALwApACwAIAB3AGkAdABoACAAUgBlAHMAZQByAHYAZQBkACAARgBvAG4AdAAgAE4AYQBtAGUAICAYAFMAbwB1AHIAYwBlIBkALgAAAAEAAAAKADAAPgAEREZMVAAaY3lybAAaZ3JlawAabGF0bgAaAAQAAAAA//8AAQAAAAFrZXJuAAgAAAABAAAAAQAEAAkACAAEApQCJAB+AA4AAQACAAAACAACACwABAAAAtIAMgABAA4AAP/a//D/8v/5/+n/+v/f/9j/rf/Y/+b/4gAAAAEAAQAZAAEAAgAYAAEAAgAEAAUABQADAAQABAANAA0ABQAMAA0ABgAHAAgACQAKAAMAAwADAAMAAwALAAEAAgAAAAgAAgEuAAQAAAFuATgACwANAAD/7//1/+z/7//sAAAAAAAAAAAAAAAAAAAAAAAA//3/+f/2//b/+f/9AAf//f/sAAAAAAAAAAAAAP/9//r/9v/9/+8AAAAA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) format('truetype')}</style>
   <defs>
-    <clipPath id="home-banner-tracks-frame">
-      <rect width="1200" height="420" rx="20" />
+    <clipPath id="og-en-frame">
+      <rect width="1200" height="630" />
     </clipPath>
   </defs>
-  <rect width="1200" height="420" rx="20" fill="#F6F3EC" />
-  <g clip-path="url(#home-banner-tracks-frame)">
+  <rect width="1200" height="630" fill="#F6F3EC" />
+  <g clip-path="url(#og-en-frame)">
     <g fill="none" stroke="#D8D6D0" stroke-width="2">
-      <circle cx="160" cy="240" r="90" />
-      <circle cx="160" cy="240" r="118" />
-      <circle cx="160" cy="240" r="146" />
-      <circle cx="160" cy="240" r="174" />
-      <circle cx="160" cy="240" r="202" />
-      <circle cx="160" cy="240" r="230" />
-      <circle cx="160" cy="240" r="258" />
-      <circle cx="160" cy="240" r="286" />
-      <circle cx="160" cy="240" r="314" />
-      <circle cx="160" cy="240" r="342" />
-      <circle cx="160" cy="240" r="370" />
-      <circle cx="160" cy="240" r="398" />
-      <circle cx="160" cy="240" r="426" />
-      <circle cx="160" cy="240" r="454" />
-      <circle cx="160" cy="240" r="482" />
-      <circle cx="160" cy="240" r="510" />
-      <circle cx="160" cy="240" r="538" />
-      <circle cx="160" cy="240" r="566" />
-      <circle cx="160" cy="240" r="594" />
-      <circle cx="160" cy="240" r="622" />
-      <circle cx="160" cy="240" r="650" />
-      <circle cx="160" cy="240" r="678" />
-      <circle cx="160" cy="240" r="706" />
-      <circle cx="160" cy="240" r="734" />
-      <circle cx="160" cy="240" r="762" />
-      <circle cx="160" cy="240" r="790" />
-      <circle cx="160" cy="240" r="818" />
-      <circle cx="160" cy="240" r="846" />
-      <circle cx="160" cy="240" r="874" />
-      <circle cx="160" cy="240" r="902" />
-      <circle cx="160" cy="240" r="930" />
-      <circle cx="160" cy="240" r="958" />
-      <circle cx="160" cy="240" r="986" />
-      <circle cx="160" cy="240" r="1014" />
-      <circle cx="160" cy="240" r="1042" />
-      <circle cx="160" cy="240" r="1070" />
+      <circle cx="1010" cy="150" r="90" />
+      <circle cx="1010" cy="150" r="118" />
+      <circle cx="1010" cy="150" r="146" />
+      <circle cx="1010" cy="150" r="174" />
+      <circle cx="1010" cy="150" r="202" />
+      <circle cx="1010" cy="150" r="230" />
+      <circle cx="1010" cy="150" r="258" />
+      <circle cx="1010" cy="150" r="286" />
+      <circle cx="1010" cy="150" r="314" />
+      <circle cx="1010" cy="150" r="342" />
+      <circle cx="1010" cy="150" r="370" />
+      <circle cx="1010" cy="150" r="398" />
+      <circle cx="1010" cy="150" r="426" />
+      <circle cx="1010" cy="150" r="454" />
     </g>
   </g>
-  <g clip-path="url(#home-banner-tracks-frame)">
-    <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
-      <path d="M300,240 H440" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#F7C6A1" stroke-width="100" />
-      <path d="M520,240 H650" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#B9DEC3" stroke-width="100" />
-      <path d="M730,240 H860" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#C5CDF2" stroke-width="100" />
-      <path d="M940,240 H1070" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#F4DD8E" stroke-width="100" />
-      <path d="M230,240 L1150,240" fill="none" stroke="#121212" stroke-width="4" stroke-linecap="round" />
-      <g data-piece="bank-courier" transform="translate(370 280) scale(0.8)" stroke="none">
-        <g>
-          <path d="M-42 -100 L-60 -126 H-34 L-18 -100 Z" fill="#121212" />
-          <path d="M-42 -40 L-60 -14 H-34 L-18 -40 Z" fill="#121212" />
-          <rect x="-72" y="-84" width="14" height="28" rx="4" fill="#121212" />
-          <path d="M-50 -102 H18 C58 -102 80 -84 80 -70 C80 -56 58 -38 18 -38 H-50 A32 32 0 0 1 -50 -102 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round" />
-          <rect x="-40" y="-82" width="24" height="24" rx="5" fill="#E04E17" />
-          <g>
-            <rect x="-2" y="-90" width="56" height="38" rx="15.833333333333334" fill="#121212" />
-            <rect x="11.72" y="-78.98" width="6.16" height="15.96" rx="3.08" fill="#FFC98A" stroke="none" />
-            <rect x="34.12" y="-78.98" width="6.16" height="15.96" rx="3.08" fill="#FFC98A" stroke="none" />
-          </g>
-        </g>
+  <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
+    <g transform="translate(960 120) scale(2.6)">
+      <rect x="5" y="3" width="5.5" height="26" rx="2.75" fill="#121212" />
+      <circle cx="17.5" cy="20.5" r="7.3" fill="none" stroke="#121212" stroke-width="4.6" />
+      <circle cx="27.5" cy="9" r="2.8" fill="#E04E17" />
+    </g>
+    <g data-piece="category-icon-integration" transform="translate(140 470) scale(2)">
+      <circle cx="21" cy="21" r="19.5" fill="#F7C6A1" stroke="#E3AB84" stroke-width="1" />
+      <g data-piece="brand-icon-pointToPointChannel" transform="translate(9 9) scale(0.5)" stroke="none">
+        <path d="M6 24 H38" stroke="#121212" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        <circle cx="42" cy="24" r="5" fill="#F6F3EC" stroke="#121212" stroke-width="3.5" />
       </g>
-      <g data-piece="bank-carga" transform="translate(585 290) scale(0.8)" stroke="none">
-        <g>
-          <rect x="-44" y="-152" width="60" height="28" rx="4" fill="#E04E17" />
-          <path d="M-30 -152 V-124 M-14 -152 V-124 M2 -152 V-124" stroke="#FFFFFF" stroke-width="3" />
-          <path d="M-24 -60 L-38 -32 L-24 -6 M24 -60 L12 -32 L26 -6" stroke="#121212" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-          <rect x="-40" y="-8" width="30" height="9" rx="4.5" fill="#121212" />
-          <rect x="12" y="-8" width="30" height="9" rx="4.5" fill="#121212" />
-          <rect x="-50" y="-126" width="100" height="70" rx="16" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round" />
-          <g>
-            <rect x="-30" y="-114" width="62" height="36" rx="15" fill="#121212" />
-            <rect x="-14.81" y="-103.56" width="6.82" height="15.12" rx="3.41" fill="#FFC98A" stroke="none" />
-            <rect x="9.99" y="-103.56" width="6.82" height="15.12" rx="3.41" fill="#FFC98A" stroke="none" />
-          </g>
-          <path d="M50 -96 H66 V-74" stroke="#121212" stroke-width="7" stroke-linecap="round" fill="none" />
-          <path d="M58 -74 H74" stroke="#121212" stroke-width="7" stroke-linecap="round" />
-        </g>
+    </g>
+    <g data-piece="category-icon-delivery" transform="translate(252 470) scale(2)">
+      <circle cx="21" cy="21" r="19.5" fill="#B9DEC3" stroke="#98C6A5" stroke-width="1" />
+      <g data-piece="brand-icon-gateToProduction" transform="translate(9 9) scale(0.5)" stroke="none">
+        <path d="M4 24 H44" stroke="#121212" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        <rect x="20" y="10" width="8" height="28" rx="3" fill="#E04E17" />
+        <circle cx="10" cy="24" r="5" fill="#121212" />
+        <circle cx="42" cy="24" r="5" fill="#F6F3EC" stroke="#121212" stroke-width="3.5" />
       </g>
-      <g data-piece="bank-hub" transform="translate(795 292) scale(0.72)" stroke="none">
-        <g>
-          <path d="M-30 -70 Q-70 -60 -84 -14" stroke="#121212" stroke-width="7" fill="none" stroke-linecap="round" />
-          <rect x="-92" y="-18" width="16" height="12" rx="3" fill="#E04E17" />
-          <path d="M-14 -64 Q-30 -30 -40 0" stroke="#121212" stroke-width="7" fill="none" stroke-linecap="round" />
-          <rect x="-48" y="-4" width="16" height="12" rx="3" fill="#E04E17" />
-          <path d="M14 -64 Q30 -30 40 0" stroke="#121212" stroke-width="7" fill="none" stroke-linecap="round" />
-          <rect x="32" y="-4" width="16" height="12" rx="3" fill="#E04E17" />
-          <path d="M30 -70 Q70 -60 84 -14" stroke="#121212" stroke-width="7" fill="none" stroke-linecap="round" />
-          <rect x="76" y="-18" width="16" height="12" rx="3" fill="#E04E17" />
-          <path d="M-50 -76 V-104 A50 50 0 0 1 50 -104 V-76 Q0 -60 -50 -76 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round" />
-          <g>
-            <rect x="-36" y="-130" width="72" height="40" rx="16.666666666666668" fill="#121212" />
-            <rect x="-18.36" y="-118.4" width="7.92" height="16.8" rx="3.96" fill="#FFC98A" stroke="none" />
-            <rect x="10.44" y="-118.4" width="7.92" height="16.8" rx="3.96" fill="#FFC98A" stroke="none" />
-          </g>
-        </g>
+    </g>
+    <g data-piece="category-icon-ai-engineering" transform="translate(364 470) scale(2)">
+      <circle cx="21" cy="21" r="19.5" fill="#C5CDF2" stroke="#A5AEDA" stroke-width="1" />
+      <g data-piece="brand-icon-contextWindow" transform="translate(9 9) scale(0.5)" stroke="none">
+        <rect x="6" y="12" width="36" height="24" rx="5" fill="none" stroke="#121212" stroke-width="3.5" />
+        <circle cx="14" cy="24" r="3.5" fill="#121212" />
+        <circle cx="22" cy="24" r="3.5" fill="#121212" />
+        <circle cx="30" cy="24" r="3.5" fill="#121212" />
+        <path d="M36 20 V28" stroke="#121212" stroke-width="3" />
       </g>
-      <g data-piece="bank-lume" transform="translate(1005 290) scale(0.8)" stroke="none">
-        <g>
-          <path d="M-20 -138 A20 20 0 0 1 20 -138" stroke="#121212" stroke-width="6" fill="none" />
-          <path d="M-30 -138 H30 L38 -124 H-38 Z" fill="#121212" />
-          <rect x="-36" y="-126" width="72" height="80" rx="14" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round" />
-          <g>
-            <rect x="-25" y="-114" width="50" height="44" rx="18.333333333333336" fill="#121212" />
-            <rect x="-12.75" y="-101.24" width="5.5" height="18.48" rx="2.75" fill="#FFC98A" stroke="none" />
-            <rect x="7.25" y="-101.24" width="5.5" height="18.48" rx="2.75" fill="#FFC98A" stroke="none" />
-          </g>
-          <path d="M-38 -46 H38 L30 -34 H-30 Z" fill="#121212" />
-          <path d="M-10 -34 H10 L0 -20 Z" fill="#121212" />
-          <path d="M50 -104 L78 -112" stroke="#E04E17" stroke-width="7" stroke-linecap="round" />
-          <path d="M54 -82 L86 -86" stroke="#E04E17" stroke-width="7" stroke-linecap="round" />
-          <path d="M58 -60 L94 -60" stroke="#E04E17" stroke-width="7" stroke-linecap="round" />
-        </g>
+    </g>
+    <g data-piece="category-icon-personal-tools" transform="translate(476 470) scale(2)">
+      <circle cx="21" cy="21" r="19.5" fill="#F4DD8E" stroke="#DDC46C" stroke-width="1" />
+      <g transform="translate(9 9) scale(0.5)" stroke="none">
+        <path d="M12 36 L28 20 M24 12 L36 24" stroke="#121212" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        <circle cx="16" cy="32" r="6" fill="none" stroke="#E04E17" stroke-width="3.5" />
       </g>
-      <g data-piece="mira" transform="translate(150 320) scale(1.15)" stroke="none">
+    </g>
+    <g data-piece="signature">
+      <g data-piece="mira" transform="translate(1118.5 606) scale(0.25)" stroke="none">
         <g>
           <path d="M-16 -44 L-34 0 M16 -44 L34 0" stroke="#121212" stroke-width="8" stroke-linecap="round" />
           <rect x="-44" y="-6" width="20" height="7" rx="3.5" fill="#121212" />
           <rect x="24" y="-6" width="20" height="7" rx="3.5" fill="#121212" />
-          <g transform="translate(0,-90) rotate(0)">
+          <g transform="translate(0,-90) rotate(-40)">
             <rect x="-74" y="-3.5" width="74" height="7" rx="3.5" fill="#121212" />
             <circle cx="-74" cy="0" r="8" fill="#121212" />
             <path d="M14 -7 L96 0 L14 7 Z" fill="#E04E17" />
@@ -139,37 +85,19 @@
           <path d="M-28 -137 Q0 -146 28 -137 Q11.200000000000001 -132 0 -114 Q-11.200000000000001 -132 -28 -137 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round" />
         </g>
       </g>
-      <g data-piece="brand-icon-message" transform="translate(935 216) scale(1)" stroke="none">
-        <circle cx="24" cy="24" r="8" fill="#121212" />
-      </g>
-      <g data-piece="signature">
-        <g data-piece="mira" transform="translate(1118.5 396) scale(0.25)" stroke="none">
-          <g>
-            <path d="M-16 -44 L-34 0 M16 -44 L34 0" stroke="#121212" stroke-width="8" stroke-linecap="round" />
-            <rect x="-44" y="-6" width="20" height="7" rx="3.5" fill="#121212" />
-            <rect x="24" y="-6" width="20" height="7" rx="3.5" fill="#121212" />
-            <g transform="translate(0,-90) rotate(-40)">
-              <rect x="-74" y="-3.5" width="74" height="7" rx="3.5" fill="#121212" />
-              <circle cx="-74" cy="0" r="8" fill="#121212" />
-              <path d="M14 -7 L96 0 L14 7 Z" fill="#E04E17" />
-            </g>
-            <circle cx="0" cy="-90" r="50" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round" />
-            <g>
-              <rect x="-30" y="-104" width="60" height="32" rx="13.333333333333334" fill="#121212" />
-              <rect x="-15.3" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A" />
-              <rect x="8.7" y="-94.72" width="6.6" height="13.44" rx="3.3" fill="#FFC98A" />
-            </g>
-            <path d="M-28 -137 Q0 -146 28 -137 Q11.200000000000001 -132 0 -114 Q-11.200000000000001 -132 -28 -137 Z" fill="#E04E17" stroke="#121212" stroke-width="5" stroke-linejoin="round" />
-          </g>
-        </g>
-        <g transform="translate(1152 362.13) scale(0.75)">
-          <rect x="5" y="3" width="5.5" height="26" rx="2.75" fill="#121212" />
-          <circle cx="17.5" cy="20.5" r="7.3" fill="none" stroke="#121212" stroke-width="4.6" />
-          <circle cx="27.5" cy="9" r="2.8" fill="#E04E17" />
-        </g>
+      <g transform="translate(1152 572.13) scale(0.75)">
+        <rect x="5" y="3" width="5.5" height="26" rx="2.75" fill="#121212" />
+        <circle cx="17.5" cy="20.5" r="7.3" fill="none" stroke="#121212" stroke-width="4.6" />
+        <circle cx="27.5" cy="9" r="2.8" fill="#E04E17" />
       </g>
     </g>
-    <g font-size="19" font-weight="700" fill="#121212" text-anchor="middle" />
+  </g>
+  <g font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
+    <g data-piece="headline" font-family="'Source Serif 4', Georgia, 'Times New Roman', serif" font-size="96" font-weight="700" letter-spacing="-0.96" fill="#121212" text-anchor="start">
+      <text x="140" y="190">Code that runs</text>
+      <text x="140" y="295.6">for the problem</text>
+      <text x="140" y="401.2">you have.</text>
+    </g>
   </g>
 
 </svg>

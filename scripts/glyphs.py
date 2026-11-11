@@ -6,9 +6,11 @@ so the words on the buttons are drawn as paths in the brand's face (Source Sans 
 Bold, a copy of the design system's fonts/SourceSans3-Bold.ttf in fonts/).
 
 Reads what a horizontal line of Latin text needs: cmap (formats 4 and 12), hmtx,
-loca/glyf (simple and composite glyphs) and the GPOS pair kerning of the `kern`
-feature (PairPos formats 1 and 2, also through Extension lookups). No shaping,
-no ligatures: the button labels need none.
+loca/glyf (simple and composite glyphs, nested up to MAX_COMPONENT_DEPTH) and the
+GPOS pair kerning of the `kern` feature (PairPos formats 1 and 2, also through
+Extension lookups). Each kern lookup applies in turn to every adjacent pair, its
+first matching subtable giving the adjustment, and the adjustments add up (this
+font has one kern lookup). No shaping, no ligatures: the button labels need none.
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ from pathlib import Path
 
 ON_CURVE, X_SHORT, Y_SHORT, REPEAT, X_SAME, Y_SAME = 0x01, 0x02, 0x04, 0x08, 0x10, 0x20
 ARG_WORDS, ARGS_XY, HAS_SCALE, MORE, HAS_XY_SCALE, HAS_2X2 = 0x0001, 0x0002, 0x0008, 0x0020, 0x0040, 0x0080
+MAX_COMPONENT_DEPTH = 8  # a composite inside a composite: real fonts nest two or three levels
 
 Point = tuple[float, float, bool]
 
@@ -143,7 +146,8 @@ class Font:
         return self.i16(at + 2 * bin(fmt & 0x0003).count("1"))
 
     @cached_property
-    def _pair_subtables(self) -> list[int]:
+    def _pair_lookups(self) -> list[list[int]]:
+        """The PairPos subtables of each kern lookup, lookup by lookup."""
         gpos = self.tables.get("GPOS")
         if gpos is None:
             return []
@@ -153,10 +157,11 @@ class Font:
             if self.data[features + 2 + 6 * f : features + 6 + 6 * f] == b"kern":
                 feature = features + self.u16(features + 6 + 6 * f)
                 indices += [self.u16(feature + 4 + 2 * i) for i in range(self.u16(feature + 2))]
-        subtables = []
-        for index in dict.fromkeys(indices):
+        result = []
+        for index in sorted(set(indices)):  # lookups apply in LookupList order
             lookup = lookups + self.u16(lookups + 2 + 2 * index)
             kind = self.u16(lookup)
+            subtables = []
             for s in range(self.u16(lookup + 4)):
                 sub = lookup + self.u16(lookup + 6 + 2 * s)
                 if kind == 9:  # Extension: the real lookup type and a 32-bit offset
@@ -166,10 +171,16 @@ class Font:
                 elif kind != 2:
                     continue
                 subtables.append(sub)
-        return subtables
+            result.append(subtables)
+        return result
 
     def kerning(self, left: int, right: int) -> int:
-        for sub in self._pair_subtables:
+        """The x-advance adjustment between two glyphs: the sum over the kern lookups."""
+        return sum(self._pair_adjustment(subtables, left, right) for subtables in self._pair_lookups)
+
+    def _pair_adjustment(self, subtables: list[int], left: int, right: int) -> int:
+        """What one lookup gives the pair: its first subtable that matches, else 0."""
+        for sub in subtables:
             covered = self._coverage(sub + self.u16(sub + 2)).get(left)
             if covered is None:
                 continue
@@ -199,13 +210,15 @@ class Font:
             start, end = 2 * self.u16(loca + 2 * glyph), 2 * self.u16(loca + 2 * glyph + 2)
         return self.tables["glyf"] + start, end - start
 
-    def contours(self, glyph: int) -> list[list[Point]]:
+    def contours(self, glyph: int, depth: int = 0) -> list[list[Point]]:
+        if depth > MAX_COMPONENT_DEPTH:
+            raise ValueError(f"glyphs: composite glyphs nested deeper than {MAX_COMPONENT_DEPTH} levels")
         at, length = self._glyph_range(glyph)
         if length == 0:
             return []
         count = self.i16(at)
         if count < 0:
-            return self._composite(at + 10)
+            return self._composite(at + 10, depth)
         ends = [self.u16(at + 10 + 2 * i) for i in range(count)]
         at += 10 + 2 * count
         at += 2 + self.u16(at)  # skip the instructions
@@ -241,7 +254,7 @@ class Font:
             values.append(value)
         return values, at
 
-    def _composite(self, at: int) -> list[list[Point]]:
+    def _composite(self, at: int, depth: int) -> list[list[Point]]:
         result: list[list[Point]] = []
         while True:
             flags, component = self.u16(at), self.u16(at + 2)
@@ -265,7 +278,7 @@ class Font:
             elif flags & HAS_2X2:
                 a, b, c, d = (f2dot14(at + k) for k in (0, 2, 4, 6))
                 at += 8
-            for contour in self.contours(component):
+            for contour in self.contours(component, depth + 1):
                 result.append([(a * x + c * y + dx, b * x + d * y + dy, on) for x, y, on in contour])
             if not flags & MORE:
                 return result
@@ -295,8 +308,8 @@ def contour_path(points: list[Point], dx: float = 0) -> str:
         return ""
     pts = [(x + dx, y, on) for x, y, on in points]
     first = next((i for i, p in enumerate(pts) if p[2]), None)
-    if first is None:  # every point off the curve: start at the midpoint of the first two
-        a, b = pts[0], pts[1 % len(pts)]
+    if first is None:  # every point off the curve: start at the implied point between the last and the first
+        a, b = pts[-1], pts[0]
         pts.insert(0, ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, True))
         first = 0
     pts = pts[first:] + pts[:first]

@@ -6,11 +6,11 @@ brunosouzas.com repository, so the profile carries the same identity as the
 site (the v2 identity of the design system @brunosouzas/design-system). This
 script draws:
 
-- assets/header.svg: the site's home banner, unchanged. The site shows one of
-  two banners by the day (tracks on an even UTC day, route on an odd one, tracks
-  without JavaScript); a README image cannot pick, so the header is the tracks
-  banner, the one the site shows by default. The banner has no words, so the
-  header has none: the README's alt text carries the name.
+- assets/header.svg: the site's share image (assets-src/og/og-en.svg in the
+  brunosouzas.com repository, the source of its /og.image.png), unchanged: the
+  slogan, the symbol, the four category badges and the signature. Its slogan is
+  text in Source Serif 4, embedded in the image as the design system writes it
+  (see below); the README's alt text carries the name and the slogan.
 - assets/link-<slug>.svg and -dark.svg: the buttons (All articles, site,
   LinkedIn, email), in the site's button shapes and the design system's colours.
 
@@ -71,32 +71,96 @@ LIGHT = Theme(card="#FFFFFF", border="#121212", text="#121212", primary="#121212
 DARK = Theme(card="#1D1C1A", border="#ADA79D", text="#F1EEE8", primary="#F1EEE8", on_primary="#121110", accent="#FF7A45")
 THEMES = (("", LIGHT), ("-dark", DARK))
 
-FONT_FACE_STYLE = re.compile(r"\s*(?:@font-face\s*\{[^{}]*\}\s*)+")
-STYLE_BLOCK = re.compile(r"<style\b[^>]*>(.*?)</style>", re.DOTALL)
-FORBIDDEN = {
-    "an external or internal link": re.compile(r"\bhref="),
-    "a <style> block other than embedded @font-face fonts": re.compile(r"<style\b"),
-    "an external url()": re.compile(r"url\(\s*['\"]?(?!#)"),
-    "a <script>": re.compile(r"<script\b"),
-    "an embedded image or object": re.compile(r"<image\b|<foreignObject\b"),
-    "currentColor": re.compile(r"currentColor"),
-    "a blur or gradient": re.compile(r"\bfilter=|<filter\b|Gradient"),
-    "inline CSS": re.compile(r'\bstyle="|\bclass="'),
+FONT_FACE_BLOCK = re.compile(r"@font-face\s*\{([^{}]*)\}", re.IGNORECASE)
+CSS_URL = re.compile(r"url\(\s*['\"]?\s*([^'\")\s]*)", re.IGNORECASE)
+NOT_FRAGMENT_URL = re.compile(r"url\(\s*['\"]?\s*(?![\s'\"#])", re.IGNORECASE)  # a url() that is not a #fragment
+# Checked on the raw text too: a processing instruction (<?xml-stylesheet href=...?>) never reaches the tree.
+RAW_FORBIDDEN = {
+    "an external or internal link": re.compile(r"\bhref\s*=", re.IGNORECASE),
+    "an external url()": re.compile(r"url\(\s*['\"]?\s*(?:https?:|//)", re.IGNORECASE),
+    "currentColor": re.compile(r"currentColor", re.IGNORECASE),
 }
+PROBLEMS = (
+    "not well-formed XML",
+    "an external or internal link",
+    "a <style> block other than embedded @font-face fonts",
+    "a CSS escape",
+    "an external url()",
+    "a <script>",
+    "an event handler",
+    "an embedded image or object",
+    "currentColor",
+    "a blur or gradient",
+    "inline CSS",
+)
 
 
 def embedded_fonts(css: str) -> bool:
-    """True when a <style> holds only @font-face rules whose every url() is an embedded font."""
-    if not FONT_FACE_STYLE.fullmatch(css) or "@import" in css:
+    """True when a <style> holds only @font-face rules whose every url() is an embedded font.
+
+    A backslash (a CSS escape such as `u\\72l(`) is refused outright: it could spell a url()
+    or a property the patterns here do not see.
+    """
+    blocks = FONT_FACE_BLOCK.findall(css)
+    if "\\" in css or not blocks or FONT_FACE_BLOCK.sub("", css).strip():
         return False
-    urls = re.findall(r"url\(\s*['\"]?([^'\")\s]*)", css)
-    return bool(urls) and all(u.startswith("data:font/") for u in urls)
+    for block in blocks:
+        urls = CSS_URL.findall(block)
+        if len(urls) != len(re.findall(r"url\(", block, re.IGNORECASE)):
+            return False
+        if not urls or not all(u.lower().startswith("data:font/") for u in urls):
+            return False
+    return True
+
+
+def local_name(name: str) -> str:
+    """An element or attribute name without its namespace ({uri}name) or prefix (p:name)."""
+    return name.rsplit("}", 1)[-1].rsplit(":", 1)[-1]
 
 
 def problems(svg: str) -> list[str]:
-    """Why an SVG would not render as-is through <img> on GitHub; empty when it is fine."""
-    rest = STYLE_BLOCK.sub(lambda m: "" if embedded_fonts(m.group(1)) else m.group(0), svg)
-    return [what for what, pattern in FORBIDDEN.items() if pattern.search(rest)]
+    """Why an SVG would not render as-is through <img> on GitHub; empty when it is fine.
+
+    The checks run on the parsed tree, so a namespace prefix (<s:script>), spacing
+    (href =) or quoting (style='...') does not hide a construct; a few also run on
+    the raw text, which holds what the tree drops.
+    """
+    found = {what for what, pattern in RAW_FORBIDDEN.items() if pattern.search(svg)}
+    try:
+        root = ET.fromstring(svg)
+    except ET.ParseError:
+        return ["not well-formed XML"]
+    for element in root.iter():
+        name = local_name(element.tag).lower() if isinstance(element.tag, str) else ""
+        if name == "style":
+            css = "".join(element.itertext())
+            if "\\" in css:
+                found.add("a CSS escape")
+            if not embedded_fonts(css):
+                found.add("a <style> block other than embedded @font-face fonts")
+        elif name == "script":
+            found.add("a <script>")
+        elif name in ("image", "foreignobject"):
+            found.add("an embedded image or object")
+        elif name == "filter" or name.endswith("gradient"):
+            found.add("a blur or gradient")
+        for attribute, value in element.attrib.items():
+            key = local_name(attribute).lower()
+            if key == "href":
+                found.add("an external or internal link")
+            elif key.startswith("on"):
+                found.add("an event handler")
+            elif key in ("style", "class"):
+                found.add("inline CSS")
+            elif key == "filter":
+                found.add("a blur or gradient")
+            if "\\" in value:
+                found.add("a CSS escape")
+            if NOT_FRAGMENT_URL.search(value):
+                found.add("an external url()")
+            if "currentcolor" in value.lower():
+                found.add("currentColor")
+    return [what for what in PROBLEMS if what in found]
 
 
 def tag(element: ET.Element) -> str:
@@ -126,10 +190,14 @@ def nested(root: ET.Element, x: float, y: float, width: float, height: float | N
     )
 
 
-def document(width: float, height: float, prefix: str, title: str, desc: str, body: str) -> str:
+def document(
+    width: float, height: float, prefix: str, title: str, desc: str, body: str, font_family: str | None = FONT
+) -> str:
+    """A whole SVG file; `font_family=None` for a drawing with no <text> to inherit it."""
+    family = f' font-family="{font_family}"' if font_family else ""
     return (
         f'<svg xmlns="{SVG_NS}" width="{width:g}" height="{height:g}" viewBox="0 0 {width:g} {height:g}" '
-        f'role="img" aria-labelledby="{prefix}-t {prefix}-d" font-family="{FONT}">\n'
+        f'role="img" aria-labelledby="{prefix}-t {prefix}-d"{family}>\n'
         f'  <title id="{prefix}-t">{escape(title)}</title>\n'
         f'  <desc id="{prefix}-d">{escape(desc)}</desc>\n'
         f"{body}\n</svg>\n"
@@ -138,15 +206,15 @@ def document(width: float, height: float, prefix: str, title: str, desc: str, bo
 
 # Header ---------------------------------------------------------------------
 
-HEADER_SOURCE = "home-banner-tracks.svg"
+HEADER_SOURCE = "og-en.svg"
 
 
 def header() -> str:
-    """The site's home banner as it is (1200x420, the design system's banner size), with its own description."""
-    banner = load(HEADER_SOURCE)
-    desc = next((e.text or "" for e in banner if tag(e) == "desc"), "").strip()
-    width, height = (float(v) for v in banner.get("viewBox", "").split()[2:])
-    return document(width, height, "hd", "Bruno Souza, brunosouzas.com", desc, f"  {inner(banner)}")
+    """The site's share image as it is (1200x630, the Open Graph size), with its own description."""
+    image = load(HEADER_SOURCE)
+    desc = next((e.text or "" for e in image if tag(e) == "desc"), "").strip()
+    width, height = (float(v) for v in image.get("viewBox", "").split()[2:])
+    return document(width, height, "hd", "Bruno Souza, brunosouzas.com", desc, f"  {inner(image)}")
 
 
 # Buttons ----------------------------------------------------------------------
@@ -232,7 +300,7 @@ def link(item: Link, theme: Theme, dark: bool) -> str:
         f"  {extra}\n"
         f"  {words.svg(round(text_x, 2), baseline(), LABEL_SIZE, ink)}"
     )
-    return document(width, LINK_H, "lk", item.label, f"Button: {item.label}.", body)
+    return document(width, LINK_H, "lk", item.label, f"Button: {item.label}.", body, font_family=None)  # words are paths
 
 
 # Article thumbnail ----------------------------------------------------------------

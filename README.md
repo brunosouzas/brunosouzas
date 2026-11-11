@@ -1,4 +1,4 @@
-<picture><img src="assets/header.svg" width="100%" alt="Bruno Souza, brunosouzas.com: integration, delivery, AI engineering and personal tools. The home banner of brunosouzas.com: four soft tiles in the tones of the site's four tracks, joined by an ink line, with Mira pointing her needle into the first."></picture>
+<picture><img src="assets/header.svg" width="100%" alt="Bruno Souza, brunosouzas.com: &quot;Code that runs for the problem you have.&quot; Integration, delivery, AI engineering and personal tools."></picture>
 
 ### Latest articles
 
