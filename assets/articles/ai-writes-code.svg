@@ -1,15 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-labelledby="pfa-t pfa-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-labelledby="pfa-t pfa-d" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif">
   <title id="pfa-t">Cover: What Remains for Software Developers When AI Writes Code?</title>
-  <desc id="pfa-d">Illustration. On the left, a developer&#x27;s spec sheet with a checklist, labelled You. In the middle, a hub (a dome with cable arms, its screen off) that writes code, labelled AI. On the right, the code it produced under a magnifying glass that finds a problem line, labelled You. Arrows run from the spec to the hub and from the hub to the review.</desc>
+  <desc id="pfa-d">Illustration. On the left, a developer&#x27;s spec sheet with a checklist, labelled You. In the middle, a hub (a dome with cable arms and two amber eyes on its screen) that writes code, labelled AI. On the right, the code it produced under a magnifying glass that finds a problem line, labelled You. Arrows run from the spec to the hub and from the hub to the review.</desc>
   <defs><clipPath id="pfa-c"><rect width="800" height="420" rx="24"/></clipPath></defs>
-  <g clip-path="url(#pfa-c)"><svg x="0" y="0" width="800" height="420" viewBox="0 0 800 420"><defs>
+  <g clip-path="url(#pfa-c)"><svg x="0" y="0" width="800" height="420" viewBox="0 0 800 420"><style>@font-face{font-family:'Source Sans 3';font-weight:550 799;font-style:normal;src:url(data:font/ttf;base64,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) format('truetype')}</style>
+  <defs>
     <clipPath id="awc-frame">
       <rect width="800" height="420" />
     </clipPath>
   </defs>
-  <rect width="800" height="420" fill="#E2E4EC" />
+  <rect width="800" height="420" fill="#C5CDF2" />
   <g clip-path="url(#awc-frame)">
-    <g fill="none" stroke="#C7C9D0" stroke-width="2">
+    <g fill="none" stroke="#A5AEDA" stroke-width="2">
       <circle cx="392" cy="222" r="90" />
       <circle cx="392" cy="222" r="118" />
       <circle cx="392" cy="222" r="146" />
@@ -26,24 +27,23 @@
       <circle cx="392" cy="222" r="454" />
     </g>
   </g>
-  <g stroke="#0A1033" stroke-width="4" stroke-linejoin="round">
-    <rect x="118" y="136" width="128" height="170" rx="14" fill="#0A1033" transform="translate(10 10)" />
+  <g stroke="#121212" stroke-width="4" stroke-linejoin="round">
     <rect x="118" y="136" width="128" height="170" rx="14" fill="#FFFFFF" />
     <g stroke-width="3">
-      <rect x="140" y="182" width="22" height="22" rx="5" fill="#8FB2FF" />
-      <rect x="140" y="220" width="22" height="22" rx="5" fill="#8FB2FF" />
+      <rect x="140" y="182" width="22" height="22" rx="5" fill="#121212" />
+      <rect x="140" y="220" width="22" height="22" rx="5" fill="#121212" />
       <rect x="140" y="258" width="22" height="22" rx="5" fill="#FFFFFF" />
     </g>
     <g fill="none" stroke-width="3.5" stroke-linecap="round">
-      <path d="M145,193 L150,199 L158,187" stroke="#1E6FEB" />
-      <path d="M145,231 L150,237 L158,225" stroke="#1E6FEB" />
+      <path d="M145,193 L150,199 L158,187" stroke="#FFFFFF" />
+      <path d="M145,231 L150,237 L158,225" stroke="#FFFFFF" />
     </g>
-    <g stroke="none" fill="#C9D6F5">
+    <g stroke="none" fill="#D7D1C5">
       <rect x="174" y="188" width="50" height="10" rx="5" />
       <rect x="174" y="226" width="40" height="10" rx="5" />
       <rect x="174" y="264" width="46" height="10" rx="5" />
     </g>
-    <path d="M258,210 H279.12 V196 L306,222 L279.12,248 V234 H258 Z" fill="#1E6FEB" />
+    <path d="M258,210 H279.12 V196 L306,222 L279.12,248 V234 H258 Z" fill="#E04E17" />
     <g data-piece="bank-hub" transform="translate(392 302) scale(1.1)" stroke="none">
       <g>
         <path d="M-30 -70 Q-70 -60 -84 -14" stroke="#121212" stroke-width="7" fill="none" stroke-linecap="round" />
@@ -55,23 +55,26 @@
         <path d="M30 -70 Q70 -60 84 -14" stroke="#121212" stroke-width="7" fill="none" stroke-linecap="round" />
         <rect x="76" y="-18" width="16" height="12" rx="3" fill="#E04E17" />
         <path d="M-50 -76 V-104 A50 50 0 0 1 50 -104 V-76 Q0 -60 -50 -76 Z" fill="#FFFFFF" stroke="#121212" stroke-width="8" stroke-linejoin="round" />
-        <rect x="-36" y="-130" width="72" height="40" rx="16.666666666666668" fill="#121212" />
+        <g>
+          <rect x="-36" y="-130" width="72" height="40" rx="16.666666666666668" fill="#121212" />
+          <rect x="-18.36" y="-118.4" width="7.92" height="16.8" rx="3.96" fill="#FFC98A" stroke="none" />
+          <rect x="10.44" y="-118.4" width="7.92" height="16.8" rx="3.96" fill="#FFC98A" stroke="none" />
+        </g>
       </g>
     </g>
-    <path d="M500,210 H521.12 V196 L548,222 L521.12,248 V234 H500 Z" fill="#1E6FEB" />
-    <rect x="560" y="136" width="130" height="170" rx="14" fill="#0A1033" transform="translate(10 10)" />
-    <rect x="560" y="136" width="130" height="170" rx="14" fill="#14215A" />
+    <path d="M500,210 H521.12 V196 L548,222 L521.12,248 V234 H500 Z" fill="#E04E17" />
+    <rect x="560" y="136" width="130" height="170" rx="14" fill="#1D1C1A" />
     <g stroke="none">
-      <rect x="580" y="174" width="60" height="10" rx="5" fill="#3DDC84" />
-      <rect x="594" y="196" width="72" height="10" rx="5" fill="#8FB2FF" />
-      <rect x="594" y="218" width="50" height="10" rx="5" fill="#FFFFFF" />
-      <rect x="594" y="237" width="80" height="16" rx="8" fill="#FF6B6B" />
-      <rect x="580" y="262" width="44" height="10" rx="5" fill="#3DDC84" />
-      <rect x="594" y="284" width="64" height="10" rx="5" fill="#8FB2FF" />
+      <rect x="580" y="174" width="60" height="10" rx="5" fill="#ADA79D" />
+      <rect x="594" y="196" width="72" height="10" rx="5" fill="#ADA79D" />
+      <rect x="594" y="218" width="50" height="10" rx="5" fill="#F1EEE8" />
+      <rect x="594" y="237" width="80" height="16" rx="8" fill="#FF7A45" />
+      <rect x="580" y="262" width="44" height="10" rx="5" fill="#ADA79D" />
+      <rect x="594" y="284" width="64" height="10" rx="5" fill="#ADA79D" />
     </g>
     <line x1="653.68" y1="266.64" x2="691.68" y2="308.64" stroke-width="24" stroke-linecap="round" />
-    <line x1="653.68" y1="266.64" x2="691.68" y2="308.64" stroke="#1E6FEB" stroke-width="15" stroke-linecap="round" />
-    <circle cx="622" cy="240" r="36" fill="#FFFFFF" fill-opacity="0.18" stroke="#1E6FEB" stroke-width="12" />
+    <line x1="653.68" y1="266.64" x2="691.68" y2="308.64" stroke="#E04E17" stroke-width="15" stroke-linecap="round" />
+    <circle cx="622" cy="240" r="36" fill="#FFFFFF" fill-opacity="0.18" stroke="#E04E17" stroke-width="12" />
     <circle cx="622" cy="240" r="42" fill="none" />
     <circle cx="622" cy="240" r="30" fill="none" />
     <rect x="148" y="118" width="68" height="36" rx="18" fill="#FFFFFF" />
@@ -104,7 +107,7 @@
       </g>
     </g>
   </g>
-  <g font-size="19" font-weight="800" fill="#0A1033" text-anchor="middle">
+  <g font-size="19" font-weight="700" fill="#121212" text-anchor="middle">
     <text x="182" y="143">You</text>
     <text x="392" y="159">AI</text>
     <text x="625" y="143">You</text>

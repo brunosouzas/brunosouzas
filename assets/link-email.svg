@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="150" height="64" viewBox="0 0 150 64" role="img" aria-labelledby="lk-t lk-d" font-family="Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="108" height="44" viewBox="0 0 108 44" role="img" aria-labelledby="lk-t lk-d">
   <title id="lk-t">Email</title>
   <desc id="lk-d">Button: Email.</desc>
-  <rect x="7" y="7" width="141" height="55" rx="14" fill="#0A1033"/>
-  <rect x="2" y="2" width="141" height="55" rx="14" fill="#FFFFFF" stroke="#0A1033" stroke-width="3"/>
-  <svg x="12" y="9" width="44" height="44" viewBox="0 0 46 46"><rect x="5" y="5" width="38" height="38" rx="9" fill="#0A1033" />
-  <rect x="2" y="2" width="38" height="38" rx="9" fill="#FFD25A" stroke="#0A1033" stroke-width="2.5" />
-  <rect x="9" y="13" width="24" height="17" rx="3" fill="#FFFFFF" stroke="#0A1033" stroke-width="2.5" />
-  <path d="M10,15 L21,23 L32,15" fill="none" stroke="#0A1033" stroke-width="2.5" stroke-linejoin="round" />
+  <rect x="1" y="1" width="106" height="42" rx="21" fill="#FFFFFF" stroke="#121212" stroke-width="2"/>
+  <svg x="8" y="8" width="28" height="28" viewBox="0.75 0.75 40.5 40.5"><g transform="translate(0 0) scale(1)" stroke="none">
+    <rect x="2" y="2" width="38" height="38" rx="9" fill="#FFFFFF" stroke="#121212" stroke-width="2.5" />
+    <rect x="9" y="13" width="24" height="17" rx="3" fill="#FFFFFF" stroke="#121212" stroke-width="2.5" />
+    <path d="M10,15 L21,23 L32,15" fill="none" stroke="#121212" stroke-width="2.5" stroke-linejoin="round" />
+  </g>
 </svg>
-  <text x="64" y="36.0" font-size="19" font-weight="800" fill="#0A1033">Email</text>
+  <path transform="translate(46 27.61) scale(0.017 -0.017)" d="M77 0L77 652L485 652L485 528L224 528L224 397L446 397L446 274L224 274L224 124L495 124L495 0L77 0ZM613 0L613 496L733 496L743 432L747 432Q778 463 813 485.5Q848 508 897 508Q950 508 982.5 486.5Q1015 465 1034 425Q1067 459 1104 483.5Q1141 508 1190 508Q1270 508 1307.5 454.5Q1345 401 1345 308L1345 0L1198 0L1198 289Q1198 343 1183.5 363Q1169 383 1137 383Q1100 383 1052 335L1052 0L905 0L905 289Q905 343 890.5 363Q876 383 844 383Q807 383 760 335L760 0L613 0ZM1595 -12Q1527 -12 1487 31.5Q1447 75 1447 138Q1447 218 1513 261.5Q1579 305 1726 320Q1724 352 1706 371Q1688 390 1648 390Q1617 390 1585 379Q1553 368 1516 347L1464 443Q1511 472 1564.5 490Q1618 508 1676 508Q1771 508 1822 453Q1873 398 1873 283L1873 0L1753 0L1743 51L1739 51Q1707 23 1672 5.5Q1637 -12 1595 -12ZM1644 103Q1669 103 1688 114Q1707 125 1726 144L1726 228Q1648 218 1618 198Q1588 178 1588 149Q1588 126 1603.5 114.5Q1619 103 1644 103ZM1997 0L1997 496L2144 496L2144 0L1997 0ZM2070 569Q2033 569 2010 590Q1987 611 1987 646Q1987 681 2010 702Q2033 723 2070 723Q2107 723 2130 702Q2153 681 2153 646Q2153 611 2130 590Q2107 569 2070 569ZM2408 -11Q2332 -11 2302.5 34Q2273 79 2273 155L2273 701L2420 701L2420 149Q2420 125 2428.5 116Q2437 107 2447 107Q2451 107 2454.5 107.5Q2458 108 2464 109L2482 1Q2470 -4 2451.5 -7.5Q2433 -11 2408 -11Z" fill="#121212"/>
 </svg>

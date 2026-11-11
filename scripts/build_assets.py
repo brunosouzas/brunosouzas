@@ -2,19 +2,29 @@
 """Build the profile README images from the site's own artwork.
 
 The sources in assets/site/ are copies of public/images/home/ in the
-brunosouzas.com repository, so the profile carries the same brand as the
-site. This script draws:
+brunosouzas.com repository, so the profile carries the same identity as the
+site (the v2 identity of the design system @brunosouzas/design-system). This
+script draws:
 
-- assets/header.svg: the site's home banner with the avatar, the name and
-  the site address on top.
+- assets/header.svg: the site's share image (assets-src/og/og-en.svg in the
+  brunosouzas.com repository, the source of its /og.image.png), unchanged: the
+  slogan, the symbol, the four category badges and the signature. Its slogan is
+  text in Source Serif 4, embedded in the image as the design system writes it
+  (see below); the README's alt text carries the name and the slogan.
 - assets/link-<slug>.svg and -dark.svg: the buttons (All articles, site,
-  LinkedIn, email).
+  LinkedIn, email), in the site's button shapes and the design system's colours.
+
+The words on the buttons are outlines (paths) drawn by scripts/glyphs.py from
+fonts/SourceSans3-Bold.ttf, a copy of the design system's face: an SVG shown
+through <img> cannot load a web font, and the files drawn here carry no CSS.
 
 It also holds the article thumbnail (the site's cover with rounded corners)
 that scripts/update_articles.py draws for each of the latest articles.
 
 GitHub shows README images through <img>, so every SVG is self-contained:
-no external references, no CSS, no scripts, fixed colours only.
+no external references, no scripts, fixed colours, and no CSS except the one
+form the design system writes into the site's covers (its ADR 0008): a <style>
+that holds only @font-face rules whose fonts are embedded as data: URLs.
 `problems()` checks that rule, for these files and for the covers downloaded
 from the site.
 
@@ -24,59 +34,133 @@ Usage: python3 scripts/build_assets.py
 from __future__ import annotations
 
 import re
+import sys
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from html import escape
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import glyphs  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "assets" / "site"
 OUTPUT = ROOT / "assets"
+FONT_FILE = ROOT / "fonts" / "SourceSans3-Bold.ttf"
 
 SVG_NS = "http://www.w3.org/2000/svg"
 ET.register_namespace("", SVG_NS)
 
-FONT = "Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif"
-
-# The site's palette (designer skill, card illustrations).
-INK = "#0A1033"
-NAVY = "#14215A"
-RING = "#1C2D74"
-WHITE = "#FFFFFF"
-LIGHT_BLUE = "#8FB2FF"
-YELLOW = "#FFD25A"
-GREEN = "#3DDC84"
-# The site's dark-theme accents (category-*-dark.svg, social-*-dark.svg).
-DARK_SHADOW = "#4C5CB8"
-DARK_HALO = "#EEF1FF"
-
-FORBIDDEN = {
-    "an external or internal link": re.compile(r"\bhref="),
-    "a <style> block": re.compile(r"<style\b"),
-    "a <script>": re.compile(r"<script\b"),
-    "an embedded image or object": re.compile(r"<image\b|<foreignObject\b"),
-    "currentColor": re.compile(r"currentColor"),
-    "a blur or gradient": re.compile(r"\bfilter=|<filter\b|Gradient"),
-    "inline CSS": re.compile(r'\bstyle="|\bclass="'),
-}
-
-
-def problems(svg: str) -> list[str]:
-    """Why an SVG would not render as-is through <img> on GitHub; empty when it is fine."""
-    return [what for what, pattern in FORBIDDEN.items() if pattern.search(svg)]
+# The design system's tokens (tokens/generated/tokens.json, 0.9.x), by token path.
+FONT = "'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif"  # font.sans
+RADIUS_PILL = 22  # radius.pill
 
 
 @dataclass(frozen=True)
 class Theme:
-    card: str
-    outline: str
-    shadow: str
-    text: str
+    card: str  # brand.<theme>.cardBg
+    border: str  # the outline the site's icon tiles use: brand.light.text, brand.dark.borderStrong
+    text: str  # brand.<theme>.text
+    primary: str  # site.<theme>.primary, the site's primary button (.btn-primary)
+    on_primary: str  # its text: white on light, brand.dark.bg on dark (the site's text-dark)
+    accent: str  # brand.<theme>.accent
 
 
-LIGHT = Theme(card=WHITE, outline=INK, shadow=INK, text=INK)
-DARK = Theme(card=NAVY, outline=DARK_SHADOW, shadow=DARK_SHADOW, text=WHITE)
+LIGHT = Theme(card="#FFFFFF", border="#121212", text="#121212", primary="#121212", on_primary="#FFFFFF", accent="#E04E17")
+DARK = Theme(card="#1D1C1A", border="#ADA79D", text="#F1EEE8", primary="#F1EEE8", on_primary="#121110", accent="#FF7A45")
 THEMES = (("", LIGHT), ("-dark", DARK))
+
+FONT_FACE_BLOCK = re.compile(r"@font-face\s*\{([^{}]*)\}", re.IGNORECASE)
+CSS_URL = re.compile(r"url\(\s*['\"]?\s*([^'\")\s]*)", re.IGNORECASE)
+NOT_FRAGMENT_URL = re.compile(r"url\(\s*['\"]?\s*(?![\s'\"#])", re.IGNORECASE)  # a url() that is not a #fragment
+# Checked on the raw text too: a processing instruction (<?xml-stylesheet href=...?>) never reaches the tree.
+RAW_FORBIDDEN = {
+    "an external or internal link": re.compile(r"\bhref\s*=", re.IGNORECASE),
+    "an external url()": re.compile(r"url\(\s*['\"]?\s*(?:https?:|//)", re.IGNORECASE),
+    "currentColor": re.compile(r"currentColor", re.IGNORECASE),
+}
+PROBLEMS = (
+    "not well-formed XML",
+    "an external or internal link",
+    "a <style> block other than embedded @font-face fonts",
+    "a CSS escape",
+    "an external url()",
+    "a <script>",
+    "an event handler",
+    "an embedded image or object",
+    "currentColor",
+    "a blur or gradient",
+    "inline CSS",
+)
+
+
+def embedded_fonts(css: str) -> bool:
+    """True when a <style> holds only @font-face rules whose every url() is an embedded font.
+
+    A backslash (a CSS escape such as `u\\72l(`) is refused outright: it could spell a url()
+    or a property the patterns here do not see.
+    """
+    blocks = FONT_FACE_BLOCK.findall(css)
+    if "\\" in css or not blocks or FONT_FACE_BLOCK.sub("", css).strip():
+        return False
+    for block in blocks:
+        urls = CSS_URL.findall(block)
+        if len(urls) != len(re.findall(r"url\(", block, re.IGNORECASE)):
+            return False
+        if not urls or not all(u.lower().startswith("data:font/") for u in urls):
+            return False
+    return True
+
+
+def local_name(name: str) -> str:
+    """An element or attribute name without its namespace ({uri}name) or prefix (p:name)."""
+    return name.rsplit("}", 1)[-1].rsplit(":", 1)[-1]
+
+
+def problems(svg: str) -> list[str]:
+    """Why an SVG would not render as-is through <img> on GitHub; empty when it is fine.
+
+    The checks run on the parsed tree, so a namespace prefix (<s:script>), spacing
+    (href =) or quoting (style='...') does not hide a construct; a few also run on
+    the raw text, which holds what the tree drops.
+    """
+    found = {what for what, pattern in RAW_FORBIDDEN.items() if pattern.search(svg)}
+    try:
+        root = ET.fromstring(svg)
+    except ET.ParseError:
+        return ["not well-formed XML"]
+    for element in root.iter():
+        name = local_name(element.tag).lower() if isinstance(element.tag, str) else ""
+        if name == "style":
+            css = "".join(element.itertext())
+            if "\\" in css:
+                found.add("a CSS escape")
+            if not embedded_fonts(css):
+                found.add("a <style> block other than embedded @font-face fonts")
+        elif name == "script":
+            found.add("a <script>")
+        elif name in ("image", "foreignobject"):
+            found.add("an embedded image or object")
+        elif name == "filter" or name.endswith("gradient"):
+            found.add("a blur or gradient")
+        for attribute, value in element.attrib.items():
+            key = local_name(attribute).lower()
+            if key == "href":
+                found.add("an external or internal link")
+            elif key.startswith("on"):
+                found.add("an event handler")
+            elif key in ("style", "class"):
+                found.add("inline CSS")
+            elif key == "filter":
+                found.add("a blur or gradient")
+            if "\\" in value:
+                found.add("a CSS escape")
+            if NOT_FRAGMENT_URL.search(value):
+                found.add("an external url()")
+            if "currentcolor" in value.lower():
+                found.add("currentColor")
+    return [what for what in PROBLEMS if what in found]
 
 
 def tag(element: ET.Element) -> str:
@@ -92,153 +176,131 @@ def drop_ns(markup: str) -> str:
     return markup.replace(f' xmlns="{SVG_NS}"', "")
 
 
-def inner(root: ET.Element, skip_background: bool = False) -> str:
-    """The drawing of a source SVG without its title and desc.
-
-    With skip_background, also drop the background rect, the defs and the
-    clipped ring group, so the drawing can sit on another background.
-    """
-    kept = []
-    for child in root:
-        name = tag(child)
-        if name in ("title", "desc"):
-            continue
-        if skip_background and (
-            name == "defs"
-            or (name == "rect" and child.get("width") == root.get("width"))
-            or child.get("clip-path")
-        ):
-            continue
-        kept.append(child)
+def inner(root: ET.Element) -> str:
+    """The drawing of a source SVG without its title and desc."""
+    kept = [child for child in root if tag(child) not in ("title", "desc")]
     return drop_ns("".join(ET.tostring(e, encoding="unicode") for e in kept))
 
 
-def nested(root: ET.Element, x: float, y: float, width: float, height: float | None = None) -> str:
+def nested(root: ET.Element, x: float, y: float, width: float, height: float | None = None, view: str = "") -> str:
     """Place a whole source SVG as a nested, scaled <svg>."""
     return (
-        f'<svg x="{x}" y="{y}" width="{width}" height="{height or width}" '
-        f'viewBox="{root.get("viewBox")}">{inner(root)}</svg>'
+        f'<svg x="{x:g}" y="{y:g}" width="{width:g}" height="{height or width:g}" '
+        f'viewBox="{view or root.get("viewBox")}">{inner(root)}</svg>'
     )
 
 
-def rings(cx: float, cy: float, start: int, stop: int, clip: str) -> str:
-    circles = "".join(f'<circle cx="{cx}" cy="{cy}" r="{r}"/>' for r in range(start, stop, 28))
-    return f'<g clip-path="url(#{clip})" fill="none" stroke="{RING}" stroke-width="2">{circles}</g>'
-
-
-def document(width: int, height: int, prefix: str, title: str, desc: str, body: str) -> str:
+def document(
+    width: float, height: float, prefix: str, title: str, desc: str, body: str, font_family: str | None = FONT
+) -> str:
+    """A whole SVG file; `font_family=None` for a drawing with no <text> to inherit it."""
+    family = f' font-family="{font_family}"' if font_family else ""
     return (
-        f'<svg xmlns="{SVG_NS}" width="{width}" height="{height}" viewBox="0 0 {width} {height}" '
-        f'role="img" aria-labelledby="{prefix}-t {prefix}-d" font-family="{FONT}">\n'
+        f'<svg xmlns="{SVG_NS}" width="{width:g}" height="{height:g}" viewBox="0 0 {width:g} {height:g}" '
+        f'role="img" aria-labelledby="{prefix}-t {prefix}-d"{family}>\n'
         f'  <title id="{prefix}-t">{escape(title)}</title>\n'
         f'  <desc id="{prefix}-d">{escape(desc)}</desc>\n'
         f"{body}\n</svg>\n"
     )
 
 
-def card(width: int, height: int, theme: Theme, offset: int = 6, radius: int = 18) -> str:
-    """A flat card with an outline and a hard offset shadow, the site's style."""
-    w, h = width - offset - 4, height - offset - 4
-    return (
-        f'  <rect x="{2 + offset}" y="{2 + offset}" width="{w}" height="{h}" rx="{radius}" fill="{theme.shadow}"/>\n'
-        f'  <rect x="2" y="2" width="{w}" height="{h}" rx="{radius}" fill="{theme.card}" '
-        f'stroke="{theme.outline}" stroke-width="3"/>\n'
-    )
-
-
 # Header ---------------------------------------------------------------------
 
-HEADER_W, HEADER_H = 1200, 580
-BANNER_DROP = 160  # the banner sits lower, leaving a quiet band for the name
+HEADER_SOURCE = "og-en.svg"
 
 
 def header() -> str:
-    banner = load("home-banner.svg")
-    avatar = load("avatar.svg")
-    av_x, av_y, av = 60, 40, 112
-    pill_x, pill_y, pill_w, pill_h = 896, 66, 244, 50
-    body = f"""  <defs><clipPath id="hd-f"><rect width="{HEADER_W}" height="{HEADER_H}" rx="20"/></clipPath></defs>
-  <rect width="{HEADER_W}" height="{HEADER_H}" rx="20" fill="{NAVY}"/>
-  {rings(600, 225 + BANNER_DROP, 60, 760, "hd-f")}
-  <g transform="translate(0 {BANNER_DROP})">{inner(banner, skip_background=True)}</g>
-  <rect x="{av_x + 8}" y="{av_y + 8}" width="{av}" height="{av}" rx="12" fill="{INK}"/>
-  {nested(avatar, av_x, av_y, av)}
-  <rect x="{av_x}" y="{av_y}" width="{av}" height="{av}" rx="10" fill="none" stroke="{INK}" stroke-width="4"/>
-  <rect x="{pill_x + 6}" y="{pill_y + 6}" width="{pill_w}" height="{pill_h}" rx="{pill_h / 2}" fill="{INK}"/>
-  <rect x="{pill_x}" y="{pill_y}" width="{pill_w}" height="{pill_h}" rx="{pill_h / 2}" fill="{YELLOW}" stroke="{INK}" stroke-width="4"/>
-  <text x="{av_x + av + 32}" y="{av_y + 60}" font-size="54" font-weight="800" fill="{WHITE}">Bruno Souza</text>
-  <text x="{av_x + av + 34}" y="{av_y + 100}" font-size="24" font-weight="700" fill="{LIGHT_BLUE}">Integration · MuleSoft · AI-assisted engineering</text>
-  <text x="{pill_x + pill_w / 2}" y="{pill_y + 33}" font-size="22" font-weight="800" fill="{INK}" text-anchor="middle">brunosouzas.com</text>"""
-    return document(
-        HEADER_W,
-        HEADER_H,
-        "hd",
-        "Bruno Souza: integration, MuleSoft and AI-assisted engineering",
-        "Header of the GitHub profile, drawn from the brunosouzas.com home banner. "
-        "Top left, the illustrated avatar (a bearded engineer in a cap with a small AI robot), "
-        "the name Bruno Souza and the line Integration, MuleSoft, AI-assisted engineering; "
-        "top right, a yellow pill with the address brunosouzas.com. Below, a web application "
-        "and a server stack send requests through pipes into an orange integration hub fed by "
-        "a green AI robot; the result passes three CI/CD checks into a cloud, and an open "
-        "notebook stands for the articles.",
-        body,
-    )
+    """The site's share image as it is (1200x630, the Open Graph size), with its own description."""
+    image = load(HEADER_SOURCE)
+    desc = next((e.text or "" for e in image if tag(e) == "desc"), "").strip()
+    width, height = (float(v) for v in image.get("viewBox", "").split()[2:])
+    return document(width, height, "hd", "Bruno Souza, brunosouzas.com", desc, f"  {inner(image)}")
 
 
 # Buttons ----------------------------------------------------------------------
 
-LINK_H = 64
-ICON = 40
+LINK_H = 44  # drawn at the size the README shows it (height="44")
+OUTLINE = 2
+LABEL_SIZE = 17
+ICON = 28  # the site's icon tile, without the room its 46-unit canvas keeps around it
+ICON_X = 8
+GAP = 10
+PAD = 20  # the site's .btn is px-5
+TILE_VIEW = "0.75 0.75 40.5 40.5"  # the icon's tile (38 units at 2,2) with its 2.5 outline
+ARROW_W = 14
 
 
 @dataclass(frozen=True)
 class Link:
     slug: str
     label: str
-    width: int
-    icon: str  # a source file stem, "avatar", or "arrow" (drawn here)
+    icon: str  # a source file stem, or "" for the primary button with an arrow
 
 
 LINKS = [
-    Link("articles", "All articles", 190, "arrow"),
-    Link("site", "brunosouzas.com", 250, "avatar"),
-    Link("linkedin", "LinkedIn", 170, "social-linkedin"),
-    Link("email", "Email", 150, "social-email"),
+    Link("articles", "All articles", ""),
+    Link("site", "brunosouzas.com", "avatar"),
+    Link("linkedin", "LinkedIn", "social-linkedin"),
+    Link("email", "Email", "social-email"),
 ]
 
+_font: glyphs.Font | None = None
 
-def arrow_icon(x: float, y: float, dark: bool) -> str:
-    """A green tile with an arrow, drawn like the site's social icons (46x46 at this scale)."""
-    s = (ICON + 4) / 46
-    if dark:
-        under = (
-            f'<rect x="4" y="4" width="41" height="41" rx="11" fill="{DARK_SHADOW}"/>'
-            f'<rect x="0.5" y="0.5" width="41" height="41" rx="11" fill="{DARK_HALO}"/>'
+
+def label(text: str) -> glyphs.Line:
+    global _font
+    if _font is None:
+        _font = glyphs.Font(FONT_FILE)
+    return _font.line(text)
+
+
+def baseline() -> float:
+    """The label's baseline, centring Source Sans 3's cap height (660/1000) in the button."""
+    return round(LINK_H / 2 + 0.66 * LABEL_SIZE / 2, 2)
+
+
+def icon(item: Link, dark: bool) -> str:
+    y = (LINK_H - ICON) / 2
+    if item.icon == "avatar":  # the brand symbol on its square tile, rounded like the social tiles
+        return (
+            f'<defs><clipPath id="lk-a"><rect x="{ICON_X}" y="{y:g}" width="{ICON}" height="{ICON}" rx="7"/></clipPath></defs>'
+            f'<g clip-path="url(#lk-a)">{nested(load("avatar.svg"), ICON_X, y, ICON)}</g>'
         )
-    else:
-        under = f'<rect x="5" y="5" width="38" height="38" rx="9" fill="{INK}"/>'
+    name = f"{item.icon}{'-dark' if dark else ''}.svg"
+    return nested(load(name), ICON_X, y, ICON, view=TILE_VIEW)
+
+
+def arrow(x: float, theme: Theme) -> str:
+    """A right arrow in the accent."""
+    y = LINK_H / 2
     return (
-        f'<g transform="translate({x} {y}) scale({s:.4f})">{under}'
-        f'<rect x="2" y="2" width="38" height="38" rx="9" fill="{GREEN}" stroke="{INK}" stroke-width="2.5"/>'
-        f'<path d="M11,21 H30 M23,14 L30,21 L23,28" fill="none" stroke="{INK}" stroke-width="3.5" '
-        f'stroke-linecap="round" stroke-linejoin="round"/></g>'
+        f'<path d="M{x:g},{y:g} H{x + ARROW_W:g} M{x + ARROW_W - 5:g},{y - 5:g} L{x + ARROW_W:g},{y:g} '
+        f'L{x + ARROW_W - 5:g},{y + 5:g}" fill="none" stroke="{theme.accent}" stroke-width="2.5" '
+        f'stroke-linecap="round" stroke-linejoin="round"/>'
     )
 
 
 def link(item: Link, theme: Theme, dark: bool) -> str:
-    if item.icon == "avatar":
-        icon = nested(load("avatar.svg"), 12, 9, ICON)
-    elif item.icon == "arrow":
-        icon = arrow_icon(12, 9, dark)
-    else:
-        icon = nested(load(f"{item.icon}{'-dark' if dark else ''}.svg"), 12, 9, ICON + 4)
+    words = label(item.label)
+    text_w = words.width(LABEL_SIZE)
+    half = OUTLINE / 2
+    if item.icon:  # outline button (the site's .btn-outline-primary), on the card colour
+        text_x = ICON_X + ICON + GAP
+        width = round(text_x + text_w + PAD)
+        fill, stroke, ink = theme.card, theme.border, theme.text
+        extra = icon(item, dark)
+    else:  # primary button (the site's .btn-primary), with the accent arrow
+        text_x = PAD
+        width = round(text_x + text_w + GAP + ARROW_W + PAD)
+        fill, stroke, ink = theme.primary, theme.primary, theme.on_primary
+        extra = arrow(round(text_x + text_w + GAP, 2), theme)
     body = (
-        card(item.width, LINK_H, theme, offset=5, radius=14)
-        + f"  {icon}\n"
-        + f'  <text x="{12 + ICON + 12}" y="{LINK_H / 2 + 4}" font-size="19" font-weight="800" '
-        f'fill="{theme.text}">{escape(item.label)}</text>'
+        f'  <rect x="{half:g}" y="{half:g}" width="{width - OUTLINE:g}" height="{LINK_H - OUTLINE:g}" '
+        f'rx="{RADIUS_PILL - half:g}" fill="{fill}" stroke="{stroke}" stroke-width="{OUTLINE}"/>\n'
+        f"  {extra}\n"
+        f"  {words.svg(round(text_x, 2), baseline(), LABEL_SIZE, ink)}"
     )
-    return document(item.width, LINK_H, "lk", item.label, f"Button: {item.label}.", body)
+    return document(width, LINK_H, "lk", item.label, f"Button: {item.label}.", body, font_family=None)  # words are paths
 
 
 # Article thumbnail ----------------------------------------------------------------

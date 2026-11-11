@@ -114,8 +114,8 @@ class ThumbnailFile(unittest.TestCase):
             "&#60;image &#104;ref='https://evil.example/a.png'/&#62;\">]>"
             + COVER_SVG.replace("</svg>", "&x;</svg>")
         )
-        self.assertEqual(ua.ba.problems(cover), [])  # the raw text looks clean
-        with self.assertRaises(ValueError):
+        self.assertIn("a <script>", ua.ba.problems(cover))  # problems() reads the parsed tree
+        with self.assertRaisesRegex(ValueError, "DTD"):  # and the DTD is refused before that
             ua.thumbnail_file(article, cover)
 
 
