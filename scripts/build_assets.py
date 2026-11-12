@@ -266,11 +266,11 @@ def link(item: Link, theme: Theme) -> str:
     half = OUTLINE / 2
     text_x = PAD
     width = round(text_x + text_w + GAP + ARROW_W + PAD)
-    fill, stroke, ink = theme.primary, theme.primary, theme.on_primary
+    fill, ink = theme.primary, theme.on_primary  # the primary button is outlined in its own fill colour
     extra = arrow(round(text_x + text_w + GAP, 2), theme)
     body = (
         f'  <rect x="{half:g}" y="{half:g}" width="{width - OUTLINE:g}" height="{LINK_H - OUTLINE:g}" '
-        f'rx="{RADIUS_PILL - half:g}" fill="{fill}" stroke="{stroke}" stroke-width="{OUTLINE}"/>\n'
+        f'rx="{RADIUS_PILL - half:g}" fill="{fill}" stroke="{fill}" stroke-width="{OUTLINE}"/>\n'
         f"  {extra}\n"
         f"  {words.svg(round(text_x, 2), baseline(), LABEL_SIZE, ink)}"
     )

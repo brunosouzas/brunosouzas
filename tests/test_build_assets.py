@@ -1,5 +1,6 @@
 """The README images must render on GitHub, which shows them through <img>."""
 
+import hashlib
 import html
 import re
 import sys
@@ -24,6 +25,22 @@ FIND_ME_LINKS = [
     ("https://www.linkedin.com/in/brunosouzas", "link-linkedin", "LinkedIn"),
     ("mailto:brunosouzas@gmail.com", "link-email", "Email"),
 ]
+# SHA-256 of each file in assets/design-system/ as @brunosouzas/design-system@0.12.0's cover command writes it
+# (the refresh command in AGENTS.md). CI never rebuilds these files, so this pin is what proves they are the
+# package's output, unedited. A refresh to a new pinned version updates these hashes in the same change.
+DESIGN_SYSTEM_SHA256 = {
+    "link-brunosouzas.svg": "40191a89857e9022e0fd4c381b9d8562179cb1416eba585254915f4c9dbe2ada",
+    "link-brunosouzas-dark.svg": "c0bb2c7bc655c3ba4441e9b9545c014e0df434f25b1d878d1242a555190e4b2e",
+    "link-linkedin.svg": "f4fce7e65c5cdf3d19cc930f9851169d590c6256c42bf4558bd2cb96697ceef9",
+    "link-linkedin-dark.svg": "5b2716ea7fa79df50cdcbc351e5918ecd656a80e5a617df1818039a64772e236",
+    "link-email.svg": "d4d5d1f5e45adbdf272cc2270cdc19f9b8506b58ac30484e2fec0a829fcdfd9a",
+    "link-email-dark.svg": "997f00f566294771499716bc5b714675b6ccd2f1cbf2aee76a89a5bf901d5426",
+}
+# The brand symbol's own shapes in the `brunosouzas` link icon: the b's stem and bowl, and the moon in the accent.
+# The `website` globe has none of them.
+B_SYMBOL = ('<rect x="5" y="3" width="5.5" height="26" rx="2.75" fill="#121212"/>',
+            '<circle cx="17.5" cy="20.5" r="7.3" fill="none" stroke="#121212" stroke-width="4.6"/>',
+            '<circle cx="27.5" cy="9" r="2.8" fill="#E04E17"/>')
 
 
 def thumbnails() -> dict[str, str]:
@@ -242,6 +259,20 @@ class FindMe(unittest.TestCase):
                     assert title is not None
                     self.assertEqual(title.text, name)
                     self.assertEqual(title.get("id"), f"{stem}{suffix}-title")  # the spec id, one per file
+
+    def test_icons_are_the_package_output_unedited(self):
+        self.assertEqual({p.name for p in DESIGN_SYSTEM.iterdir()}, set(DESIGN_SYSTEM_SHA256))
+        for name, digest in DESIGN_SYSTEM_SHA256.items():
+            with self.subTest(name):
+                self.assertEqual(hashlib.sha256((DESIGN_SYSTEM / name).read_bytes()).hexdigest(), digest)
+
+    def test_site_icon_is_the_b_never_the_globe(self):
+        for suffix in ("", "-dark"):  # the symbol keeps its light colours on both surfaces
+            with self.subTest(suffix or "light"):
+                svg = (DESIGN_SYSTEM / f"link-brunosouzas{suffix}.svg").read_text(encoding="utf-8")
+                for shape in B_SYMBOL:
+                    self.assertIn(shape, svg)
+                self.assertNotIn("<ellipse", svg)  # the globe's meridian
 
 
 if __name__ == "__main__":
