@@ -16,6 +16,6 @@
 
 ### Find me
 
-<a href="https://brunosouzas.com/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/link-site-dark.svg"><img src="assets/link-site.svg" height="44" alt="brunosouzas.com"></picture></a>
-<a href="https://www.linkedin.com/in/brunosouzas"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/link-linkedin-dark.svg"><img src="assets/link-linkedin.svg" height="44" alt="LinkedIn"></picture></a>
-<a href="mailto:brunosouzas@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/link-email-dark.svg"><img src="assets/link-email.svg" height="44" alt="Email"></picture></a>
+<a href="https://brunosouzas.com/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/design-system/link-brunosouzas-dark.svg"><img src="assets/design-system/link-brunosouzas.svg" height="44" alt="brunosouzas.com"></picture></a>
+<a href="https://www.linkedin.com/in/brunosouzas"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/design-system/link-linkedin-dark.svg"><img src="assets/design-system/link-linkedin.svg" height="44" alt="LinkedIn"></picture></a>
+<a href="mailto:brunosouzas@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/design-system/link-email-dark.svg"><img src="assets/design-system/link-email.svg" height="44" alt="Email"></picture></a>

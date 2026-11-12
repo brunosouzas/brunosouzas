@@ -2,8 +2,9 @@
 """Draw a line of text as SVG outlines, from a TrueType font, with the standard library only.
 
 GitHub shows README images through <img>, where an SVG cannot load a web font,
-so the words on the buttons are drawn as paths in the brand's face (Source Sans 3
-Bold, a copy of the design system's fonts/SourceSans3-Bold.ttf in fonts/).
+so the words on the All articles button are drawn as paths in the brand's face
+(Source Sans 3 Bold, a copy of the design system's fonts/SourceSans3-Bold.ttf in
+fonts/).
 
 Reads what a horizontal line of Latin text needs: cmap (formats 4 and 12), hmtx,
 loca/glyf (simple and composite glyphs, nested up to MAX_COMPONENT_DEPTH) and the

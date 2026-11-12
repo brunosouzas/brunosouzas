@@ -1,5 +1,6 @@
 """The README images must render on GitHub, which shows them through <img>."""
 
+import hashlib
 import html
 import re
 import sys
@@ -15,7 +16,37 @@ COVER = (ba.SOURCE / "og-en.svg").read_text(encoding="utf-8")  # any site illust
 FONT_FACE = "@font-face{font-family:'Source Sans 3';font-weight:550 799;src:url(data:font/ttf;base64,AAEAAA==) format('truetype')}"
 SVG = "{http://www.w3.org/2000/svg}"
 ARTICLES = ba.OUTPUT / "articles"
+DESIGN_SYSTEM = ba.OUTPUT / "design-system"  # the design system's link icons, copied as its cover command writes them
 README = (ba.ROOT / "README.md").read_text(encoding="utf-8")
+FIND_ME = README[README.index("### Find me"):]
+FIND_ME = FIND_ME[: (FIND_ME.find("\n#", 1) + 1) or None]  # up to the next heading, if one is ever added
+# The Find me row, in order: where each icon links, its file stem in assets/design-system/ and its accessible name.
+FIND_ME_LINKS = [
+    ("https://brunosouzas.com/", "link-brunosouzas", "brunosouzas.com"),
+    ("https://www.linkedin.com/in/brunosouzas", "link-linkedin", "LinkedIn"),
+    ("mailto:brunosouzas@gmail.com", "link-email", "Email"),
+]
+# SHA-256 of each file in assets/design-system/ as @brunosouzas/design-system@0.12.0's cover command writes it
+# (the refresh command in AGENTS.md). CI never rebuilds these files, so this pin is what proves they are the
+# package's output, unedited. A refresh to a new pinned version updates these hashes in the same change.
+DESIGN_SYSTEM_SHA256 = {
+    "link-brunosouzas.svg": "40191a89857e9022e0fd4c381b9d8562179cb1416eba585254915f4c9dbe2ada",
+    "link-brunosouzas-dark.svg": "c0bb2c7bc655c3ba4441e9b9545c014e0df434f25b1d878d1242a555190e4b2e",
+    "link-linkedin.svg": "f4fce7e65c5cdf3d19cc930f9851169d590c6256c42bf4558bd2cb96697ceef9",
+    "link-linkedin-dark.svg": "5b2716ea7fa79df50cdcbc351e5918ecd656a80e5a617df1818039a64772e236",
+    "link-email.svg": "d4d5d1f5e45adbdf272cc2270cdc19f9b8506b58ac30484e2fec0a829fcdfd9a",
+    "link-email-dark.svg": "997f00f566294771499716bc5b714675b6ccd2f1cbf2aee76a89a5bf901d5426",
+}
+# The brand symbol's own shapes in the `brunosouzas` link icon: the b's stem and bowl, and the moon in the accent.
+# The `website` globe has none of them.
+B_SYMBOL = ('<rect x="5" y="3" width="5.5" height="26" rx="2.75" fill="#121212"/>',
+            '<circle cx="17.5" cy="20.5" r="7.3" fill="none" stroke="#121212" stroke-width="4.6"/>',
+            '<circle cx="27.5" cy="9" r="2.8" fill="#E04E17"/>')
+
+
+def files_in(folder: Path) -> set[str]:
+    """The names in a folder, without dotfiles: a Finder .DS_Store must not fail the run on a Mac."""
+    return {p.name for p in folder.iterdir() if not p.name.startswith(".")}
 
 
 def thumbnails() -> dict[str, str]:
@@ -94,7 +125,11 @@ class Problems(unittest.TestCase):
 
 class GeneratedSvgs(unittest.TestCase):
     def setUp(self):
-        committed = {f"articles/{p.name}": p.read_text(encoding="utf-8") for p in ARTICLES.glob("*.svg")}
+        committed = {
+            f"{folder.name}/{p.name}": p.read_text(encoding="utf-8")
+            for folder in (ARTICLES, DESIGN_SYSTEM)
+            for p in folder.glob("*.svg")
+        }
         self.files = {**ba.generated(), **thumbnails(), **committed}
 
     def test_every_readme_image_exists(self):
@@ -108,6 +143,12 @@ class GeneratedSvgs(unittest.TestCase):
 
     def test_assets_top_level_is_exactly_what_the_script_draws(self):
         self.assertEqual({p.name for p in ba.OUTPUT.glob("*.svg")}, set(ba.generated()))
+
+    def test_script_draws_the_header_and_the_all_articles_button_only(self):
+        self.assertEqual(set(ba.generated()), {"header.svg", "link-articles.svg", "link-articles-dark.svg"})
+
+    def test_site_copies_are_only_what_the_script_reads(self):
+        self.assertEqual(files_in(ba.SOURCE), {ba.HEADER_SOURCE})
 
     def test_header_alt_carries_the_name_and_the_slogan(self):
         alt = re.search(r'<img src="assets/header\.svg"[^>]* alt="([^"]+)"', README)
@@ -186,6 +227,58 @@ class GeneratedSvgs(unittest.TestCase):
         for name, svg in ba.generated().items():
             with self.subTest(name):
                 self.assertEqual((ba.OUTPUT / name).read_text(encoding="utf-8"), svg)
+
+
+class FindMe(unittest.TestCase):
+    """The Find me section is a row of icon-only links: the design system's link icons, named by their alt."""
+
+    def anchors(self) -> list[str]:
+        return re.findall(r"<a [^>]*>.*?</a>", FIND_ME)
+
+    def test_is_one_icon_only_link_per_destination_in_order(self):
+        anchors = self.anchors()
+        self.assertEqual(len(anchors), len(FIND_ME_LINKS))
+        for anchor, (href, stem, name) in zip(anchors, FIND_ME_LINKS):
+            with self.subTest(name):
+                self.assertEqual(
+                    anchor,
+                    f'<a href="{href}"><picture><source media="(prefers-color-scheme: dark)" '
+                    f'srcset="assets/design-system/{stem}-dark.svg"><img src="assets/design-system/{stem}.svg" '
+                    f'height="44" alt="{name}"></picture></a>',
+                )
+
+    def test_shows_no_words_and_no_tooltip(self):
+        self.assertEqual(re.sub(r"<[^>]+>|\s+", "", FIND_ME[len("### Find me"):]), "")  # only the icons, no visible text
+        self.assertNotRegex(FIND_ME, r"\btitle\s*=")
+
+    def test_every_design_system_copy_is_shown(self):
+        referenced = set(re.findall(r'(?:src|srcset)="assets/design-system/([^"]+\.svg)"', README))
+        self.assertEqual(files_in(DESIGN_SYSTEM), referenced)
+
+    def test_icons_are_the_design_system_link_icons(self):
+        for _, stem, name in FIND_ME_LINKS:
+            for suffix in ("", "-dark"):
+                with self.subTest(f"{stem}{suffix}"):
+                    root = ET.parse(DESIGN_SYSTEM / f"{stem}{suffix}.svg").getroot()
+                    self.assertEqual((root.get("width"), root.get("height"), root.get("viewBox")), ("46", "46", "0 0 46 46"))
+                    title = root.find(f"{SVG}title")
+                    assert title is not None
+                    self.assertEqual(title.text, name)
+                    self.assertEqual(title.get("id"), f"{stem}{suffix}-title")  # the spec id, one per file
+
+    def test_icons_are_the_package_output_unedited(self):
+        self.assertEqual(files_in(DESIGN_SYSTEM), set(DESIGN_SYSTEM_SHA256))
+        for name, digest in DESIGN_SYSTEM_SHA256.items():
+            with self.subTest(name):
+                self.assertEqual(hashlib.sha256((DESIGN_SYSTEM / name).read_bytes()).hexdigest(), digest)
+
+    def test_site_icon_is_the_b_never_the_globe(self):
+        for suffix in ("", "-dark"):  # the symbol keeps its light colours on both surfaces
+            with self.subTest(suffix or "light"):
+                svg = (DESIGN_SYSTEM / f"link-brunosouzas{suffix}.svg").read_text(encoding="utf-8")
+                for shape in B_SYMBOL:
+                    self.assertIn(shape, svg)
+                self.assertNotIn("<ellipse", svg)  # the globe's meridian
 
 
 if __name__ == "__main__":
