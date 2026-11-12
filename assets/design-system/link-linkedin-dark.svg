@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46" role="img" aria-labelledby="social-linkedin-dark-title social-linkedin-dark-desc" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif">
-  <title id="social-linkedin-dark-title">LinkedIn</title>
-  <desc id="social-linkedin-dark-desc">LinkedIn icon.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46" role="img" aria-labelledby="link-linkedin-dark-title link-linkedin-dark-desc" font-family="'Source Sans 3', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <title id="link-linkedin-dark-title">LinkedIn</title>
+  <desc id="link-linkedin-dark-desc">LinkedIn icon.</desc>
   <g transform="translate(0 0) scale(1)" stroke="none">
     <rect x="2" y="2" width="38" height="38" rx="9" fill="#FFFFFF" stroke="#ADA79D" stroke-width="2.5"/>
     <rect x="12" y="18.5" width="4" height="11.5" rx="1" fill="#121212" stroke="none"/>

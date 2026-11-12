@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
 """Build the profile README images from the site's own artwork.
 
-The sources in assets/site/ are copies of public/images/home/ in the
-brunosouzas.com repository, so the profile carries the same identity as the
-site (the v2 identity of the design system @brunosouzas/design-system). This
-script draws:
+The source in assets/site/ is a copy from the brunosouzas.com repository, so
+the profile carries the same identity as the site (the v2 identity of the
+design system @brunosouzas/design-system). This script draws:
 
 - assets/header.svg: the site's share image (assets-src/og/og-en.svg in the
   brunosouzas.com repository, the source of its /og.image.png), unchanged: the
   slogan, the symbol, the four category badges and the signature. Its slogan is
   text in Source Serif 4, embedded in the image as the design system writes it
   (see below); the README's alt text carries the name and the slogan.
-- assets/link-<slug>.svg and -dark.svg: the buttons (All articles, site,
-  LinkedIn, email), in the site's button shapes and the design system's colours.
+- assets/link-articles.svg and -dark.svg: the All articles button, in the
+  site's primary button shape and the design system's colours.
 
-The words on the buttons are outlines (paths) drawn by scripts/glyphs.py from
+The button's words are outlines (paths) drawn by scripts/glyphs.py from
 fonts/SourceSans3-Bold.ttf, a copy of the design system's face: an SVG shown
 through <img> cannot load a web font, and the files drawn here carry no CSS.
+
+The Find me icons are not drawn here: assets/design-system/ holds the design
+system's link icons as its cover command writes them (see AGENTS.md).
 
 It also holds the article thumbnail (the site's cover with rounded corners)
 that scripts/update_articles.py draws for each of the latest articles.
@@ -59,16 +61,13 @@ RADIUS_PILL = 22  # radius.pill
 
 @dataclass(frozen=True)
 class Theme:
-    card: str  # brand.<theme>.cardBg
-    border: str  # the outline the site's icon tiles use: brand.light.text, brand.dark.borderStrong
-    text: str  # brand.<theme>.text
     primary: str  # site.<theme>.primary, the site's primary button (.btn-primary)
     on_primary: str  # its text: white on light, brand.dark.bg on dark (the site's text-dark)
     accent: str  # brand.<theme>.accent
 
 
-LIGHT = Theme(card="#FFFFFF", border="#121212", text="#121212", primary="#121212", on_primary="#FFFFFF", accent="#E04E17")
-DARK = Theme(card="#1D1C1A", border="#ADA79D", text="#F1EEE8", primary="#F1EEE8", on_primary="#121110", accent="#FF7A45")
+LIGHT = Theme(primary="#121212", on_primary="#FFFFFF", accent="#E04E17")
+DARK = Theme(primary="#F1EEE8", on_primary="#121110", accent="#FF7A45")
 THEMES = (("", LIGHT), ("-dark", DARK))
 
 FONT_FACE_BLOCK = re.compile(r"@font-face\s*\{([^{}]*)\}", re.IGNORECASE)
@@ -182,11 +181,11 @@ def inner(root: ET.Element) -> str:
     return drop_ns("".join(ET.tostring(e, encoding="unicode") for e in kept))
 
 
-def nested(root: ET.Element, x: float, y: float, width: float, height: float | None = None, view: str = "") -> str:
+def nested(root: ET.Element, x: float, y: float, width: float, height: float | None = None) -> str:
     """Place a whole source SVG as a nested, scaled <svg>."""
     return (
         f'<svg x="{x:g}" y="{y:g}" width="{width:g}" height="{height or width:g}" '
-        f'viewBox="{view or root.get("viewBox")}">{inner(root)}</svg>'
+        f'viewBox="{root.get("viewBox")}">{inner(root)}</svg>'
     )
 
 
@@ -217,16 +216,13 @@ def header() -> str:
     return document(width, height, "hd", "Bruno Souza, brunosouzas.com", desc, f"  {inner(image)}")
 
 
-# Buttons ----------------------------------------------------------------------
+# Button -----------------------------------------------------------------------
 
 LINK_H = 44  # drawn at the size the README shows it (height="44")
 OUTLINE = 2
 LABEL_SIZE = 17
-ICON = 28  # the site's icon tile, without the room its 46-unit canvas keeps around it
-ICON_X = 8
 GAP = 10
 PAD = 20  # the site's .btn is px-5
-TILE_VIEW = "0.75 0.75 40.5 40.5"  # the icon's tile (38 units at 2,2) with its 2.5 outline
 ARROW_W = 14
 
 
@@ -234,15 +230,9 @@ ARROW_W = 14
 class Link:
     slug: str
     label: str
-    icon: str  # a source file stem, or "" for the primary button with an arrow
 
 
-LINKS = [
-    Link("articles", "All articles", ""),
-    Link("site", "brunosouzas.com", "avatar"),
-    Link("linkedin", "LinkedIn", "social-linkedin"),
-    Link("email", "Email", "social-email"),
-]
+LINKS = [Link("articles", "All articles")]
 
 _font: glyphs.Font | None = None
 
@@ -259,17 +249,6 @@ def baseline() -> float:
     return round(LINK_H / 2 + 0.66 * LABEL_SIZE / 2, 2)
 
 
-def icon(item: Link, dark: bool) -> str:
-    y = (LINK_H - ICON) / 2
-    if item.icon == "avatar":  # the brand symbol on its square tile, rounded like the social tiles
-        return (
-            f'<defs><clipPath id="lk-a"><rect x="{ICON_X}" y="{y:g}" width="{ICON}" height="{ICON}" rx="7"/></clipPath></defs>'
-            f'<g clip-path="url(#lk-a)">{nested(load("avatar.svg"), ICON_X, y, ICON)}</g>'
-        )
-    name = f"{item.icon}{'-dark' if dark else ''}.svg"
-    return nested(load(name), ICON_X, y, ICON, view=TILE_VIEW)
-
-
 def arrow(x: float, theme: Theme) -> str:
     """A right arrow in the accent."""
     y = LINK_H / 2
@@ -280,20 +259,15 @@ def arrow(x: float, theme: Theme) -> str:
     )
 
 
-def link(item: Link, theme: Theme, dark: bool) -> str:
+def link(item: Link, theme: Theme) -> str:
+    """The primary button (the site's .btn-primary), with the accent arrow."""
     words = label(item.label)
     text_w = words.width(LABEL_SIZE)
     half = OUTLINE / 2
-    if item.icon:  # outline button (the site's .btn-outline-primary), on the card colour
-        text_x = ICON_X + ICON + GAP
-        width = round(text_x + text_w + PAD)
-        fill, stroke, ink = theme.card, theme.border, theme.text
-        extra = icon(item, dark)
-    else:  # primary button (the site's .btn-primary), with the accent arrow
-        text_x = PAD
-        width = round(text_x + text_w + GAP + ARROW_W + PAD)
-        fill, stroke, ink = theme.primary, theme.primary, theme.on_primary
-        extra = arrow(round(text_x + text_w + GAP, 2), theme)
+    text_x = PAD
+    width = round(text_x + text_w + GAP + ARROW_W + PAD)
+    fill, stroke, ink = theme.primary, theme.primary, theme.on_primary
+    extra = arrow(round(text_x + text_w + GAP, 2), theme)
     body = (
         f'  <rect x="{half:g}" y="{half:g}" width="{width - OUTLINE:g}" height="{LINK_H - OUTLINE:g}" '
         f'rx="{RADIUS_PILL - half:g}" fill="{fill}" stroke="{stroke}" stroke-width="{OUTLINE}"/>\n'
@@ -329,7 +303,7 @@ def generated() -> dict[str, str]:
     files = {"header.svg": header()}
     for suffix, theme in THEMES:
         for item in LINKS:
-            files[f"link-{item.slug}{suffix}.svg"] = link(item, theme, suffix == "-dark")
+            files[f"link-{item.slug}{suffix}.svg"] = link(item, theme)
     return files
 
 
