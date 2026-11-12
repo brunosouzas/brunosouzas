@@ -19,6 +19,7 @@ ARTICLES = ba.OUTPUT / "articles"
 DESIGN_SYSTEM = ba.OUTPUT / "design-system"  # the design system's link icons, copied as its cover command writes them
 README = (ba.ROOT / "README.md").read_text(encoding="utf-8")
 FIND_ME = README[README.index("### Find me"):]
+FIND_ME = FIND_ME[: (FIND_ME.find("\n#", 1) + 1) or None]  # up to the next heading, if one is ever added
 # The Find me row, in order: where each icon links, its file stem in assets/design-system/ and its accessible name.
 FIND_ME_LINKS = [
     ("https://brunosouzas.com/", "link-brunosouzas", "brunosouzas.com"),
@@ -41,6 +42,11 @@ DESIGN_SYSTEM_SHA256 = {
 B_SYMBOL = ('<rect x="5" y="3" width="5.5" height="26" rx="2.75" fill="#121212"/>',
             '<circle cx="17.5" cy="20.5" r="7.3" fill="none" stroke="#121212" stroke-width="4.6"/>',
             '<circle cx="27.5" cy="9" r="2.8" fill="#E04E17"/>')
+
+
+def files_in(folder: Path) -> set[str]:
+    """The names in a folder, without dotfiles: a Finder .DS_Store must not fail the run on a Mac."""
+    return {p.name for p in folder.iterdir() if not p.name.startswith(".")}
 
 
 def thumbnails() -> dict[str, str]:
@@ -142,7 +148,7 @@ class GeneratedSvgs(unittest.TestCase):
         self.assertEqual(set(ba.generated()), {"header.svg", "link-articles.svg", "link-articles-dark.svg"})
 
     def test_site_copies_are_only_what_the_script_reads(self):
-        self.assertEqual({p.name for p in ba.SOURCE.iterdir()}, {ba.HEADER_SOURCE})
+        self.assertEqual(files_in(ba.SOURCE), {ba.HEADER_SOURCE})
 
     def test_header_alt_carries_the_name_and_the_slogan(self):
         alt = re.search(r'<img src="assets/header\.svg"[^>]* alt="([^"]+)"', README)
@@ -247,7 +253,7 @@ class FindMe(unittest.TestCase):
 
     def test_every_design_system_copy_is_shown(self):
         referenced = set(re.findall(r'(?:src|srcset)="assets/design-system/([^"]+\.svg)"', README))
-        self.assertEqual({p.name for p in DESIGN_SYSTEM.iterdir()}, referenced)
+        self.assertEqual(files_in(DESIGN_SYSTEM), referenced)
 
     def test_icons_are_the_design_system_link_icons(self):
         for _, stem, name in FIND_ME_LINKS:
@@ -261,7 +267,7 @@ class FindMe(unittest.TestCase):
                     self.assertEqual(title.get("id"), f"{stem}{suffix}-title")  # the spec id, one per file
 
     def test_icons_are_the_package_output_unedited(self):
-        self.assertEqual({p.name for p in DESIGN_SYSTEM.iterdir()}, set(DESIGN_SYSTEM_SHA256))
+        self.assertEqual(files_in(DESIGN_SYSTEM), set(DESIGN_SYSTEM_SHA256))
         for name, digest in DESIGN_SYSTEM_SHA256.items():
             with self.subTest(name):
                 self.assertEqual(hashlib.sha256((DESIGN_SYSTEM / name).read_bytes()).hexdigest(), digest)
